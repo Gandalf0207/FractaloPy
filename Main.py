@@ -4,7 +4,9 @@ from Fractales import MainFractales
 from tkinter import *
 from turtle import *
 from numpy import *
-from matplotlib import *
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 
 # Tool Box
 bgHomePage = "#f2f2ff"
@@ -25,9 +27,10 @@ framePanelModif.pack(side=LEFT, expand=False, fill='y', padx=10, pady=10)
 frameBoxCanvas = Frame(fenetre, bg=bgFramePanelModif)
 frameBoxCanvas.pack(expand=True, fill=BOTH)
 
-# Canvas > matplotlib canvas # A faire
-frameCanvas = Frame(frameBoxCanvas, bg="black")
-frameCanvas.pack(expand=True, fill=BOTH,side=TOP,  padx=10, pady=10)
+# Création de la figure dans Tkinter
+fig = plt.Figure(dpi=94)
+canvas = FigureCanvasTkAgg(fig, master=frameBoxCanvas)  # Mettre la figure dans Tkinter
+canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
 
 # Box boutton pause et generation d'image
 frameBoxButton = Frame(frameBoxCanvas, bg="blue")
