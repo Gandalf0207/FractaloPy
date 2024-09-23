@@ -79,6 +79,15 @@ class SetupFractale(object):
         self.couleurBackground = str(colors[1])
         
 
+
+
+
+
+
+
+
+
+
     
     
 # Tool Box
