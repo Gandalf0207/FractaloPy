@@ -174,7 +174,9 @@ buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
 buttonMakePlotToImg = Button(frameBoxButton, bg="white", width=15)
 buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
 
-object1 = SetupFractale(1,1,1,1,fig=fig, canvas=canvas)
+
+# Initialisation de l'objet
+object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',tailleTrait=5,couleurBackground="#ffffff",fig=fig, canvas=canvas)
 
 
 
