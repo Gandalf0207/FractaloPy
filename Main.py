@@ -24,9 +24,18 @@ def ChoixCouleur():
         # Choisit le texte en fonction de la luminosité
         return '#000000' if luminosity > 186 else '#FFFFFF'
     
-    colors = askcolor(title="Couleur trait")
-    couleurInverse = luminosityColor(str(colors[1]))
-    cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
+    reponseUtilisateur = askquestion("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
+    if reponseUtilisateur == 'no':
+        colors = askcolor(title="Couleur trait")
+        couleurInverse = luminosityColor(str(colors[1]))
+        cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
+        bouttonChoixCouleur.configure(text="Couleur Définie")
+    else:
+        cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
+        bouttonChoixCouleur.configure(text="Couleurs Aléatoires")
+
+    
+    
 
 def TailleTraitAffichage(value):
     textTailleTrait.config(text=f"Taille trait : {value}")
