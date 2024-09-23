@@ -29,10 +29,10 @@ def ChoixCouleur():
         colors = askcolor(title="Couleur trait")
         couleurInverse = luminosityColor(str(colors[1]))
         cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
-        bouttonChoixCouleur.configure(text="Couleur Définie")
+        bouttonChoixCouleur.configure(text="Couleur : Définie")
     else:
         cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
-        bouttonChoixCouleur.configure(text="Couleurs Aléatoires")
+        bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
 
     
     
