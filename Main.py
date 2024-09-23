@@ -49,3 +49,7 @@ buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
 
 
 fenetre.mainloop()
+
+
+
+# Passer en classe objet le panel de modif pour pouvoir utiliser à chaque modif et créer un object stockable 
