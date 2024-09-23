@@ -37,7 +37,7 @@ def ClearMaKe(fig):
         a = 1 ### Faire appel au script de génération de l'image (en passant la classe object pour avoir les bonnes infos je pense) ## module à faire
 
     fig.clear()  
-    fig.set_facecolor("#000000") # pour check que les modifs se font bien
+    fig.set_facecolor("#ffffff") # pour check que les modifs se font bien
     canvas.draw()
 
 def ChoixBackground(fig):
