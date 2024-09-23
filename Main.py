@@ -24,7 +24,7 @@ def ChoixCouleur():
         # Choisit le texte en fonction de la luminosité
         return '#000000' if luminosity > 186 else '#FFFFFF'
     
-    colors = askcolor(title="Tkinter Color Chooser")
+    colors = askcolor(title="Couleur trait")
     couleurInverse = luminosityColor(str(colors[1]))
     cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
 
@@ -37,7 +37,25 @@ def ClearMaKe(fig):
         a = 1 ### Faire appel au script de génération de l'image (en passant la classe object pour avoir les bonnes infos je pense) ## module à faire
 
     fig.clear()  
-    fig.set_facecolor("white") # pour check que les modifs se font bien
+    fig.set_facecolor("#000000") # pour check que les modifs se font bien
+    canvas.draw()
+
+def ChoixBackground(fig):
+    def luminosityColor(hex_color):
+        hex_color = hex_color.lstrip('#')
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+        # Calcule la luminosité perçue
+        luminosity = (0.299 * r + 0.587 * g + 0.114 * b)
+    
+        # Choisit le texte en fonction de la luminosité
+        return '#000000' if luminosity > 186 else '#FFFFFF'
+    
+    colors = askcolor(title="Couleur Arrière Plan")
+    couleurInverse = luminosityColor(str(colors[1]))
+    cadreVisuelBackground.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
+    fig.set_facecolor(f"{colors[1]}")
     canvas.draw()
 
 
@@ -95,13 +113,21 @@ textButtonClear.pack()
 buttonClear = Button(box4Clear, text="Clear !", command=lambda:ClearMaKe(fig))
 buttonClear.pack(fill='x')
 
+# Box 5 : ArrièrePlan
+box5Background = Frame(framePanelModif, bg= None)
+box5Background.pack(fill='x', padx=5, pady=5)
+butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️", command=lambda:ChoixBackground(fig))
+butttonChoixBackground.pack(fill='x')
+cadreVisuelBackground = Label(box5Background, bg = "#ffffff", text="#ffffff")
+cadreVisuelBackground.pack(fill='x')
+
 # Box du canvas et btn img + pause -------------------------------------------------------
 frameBoxCanvas = Frame(fenetre, bg=bgFramePanelModif)
 frameBoxCanvas.pack(expand=True, fill=BOTH)
 
 # Création de la figure dans Tkinter
 fig = plt.Figure(dpi=94)
-fig.set_facecolor("black")
+fig.set_facecolor("#ffffff")
 canvas = FigureCanvasTkAgg(fig, master=frameBoxCanvas)  # Mettre la figure dans Tkinter
 canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True, padx = 10, pady = 10)
 
