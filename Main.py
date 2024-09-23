@@ -9,6 +9,19 @@ from numpy import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+class SetupFractale(object):
+
+    def __init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, fig) -> None:
+        self.profondeur = profondeur
+        self.couleurTrait = couleurTrait
+        self.tailleTrait = tailleTrait
+        self.couleurBackground = couleurBackground
+        self.fig = fig
+
+    def ProfondeurAffichage(self, value, textProfonder):
+        # text.Profondeur
+
+
 def ProfondeurAffichage(value):
     textProfondeur.config(text=f"Profondeur : {value}")
 
