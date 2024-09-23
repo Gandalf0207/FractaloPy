@@ -11,75 +11,73 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class SetupFractale(object):
 
-    def __init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, fig) -> None:
+    def __init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, fig, canvas) -> None:
         self.profondeur = profondeur
         self.couleurTrait = couleurTrait
         self.tailleTrait = tailleTrait
         self.couleurBackground = couleurBackground
         self.fig = fig
+        self.canvas = canvas
 
-    def ProfondeurAffichage(self, value, textProfonder):
-        # text.Profondeur
+    def QuestionTkinter(self, titreFenetre, textFenetre):
+        return askquestion(titreFenetre, textFenetre)
 
-
-def ProfondeurAffichage(value):
-    textProfondeur.config(text=f"Profondeur : {value}")
-
-def ChoixCouleur():
-    def luminosityColor(hex_color):
-        hex_color = hex_color.lstrip('#')
-        r = int(hex_color[0:2], 16)
-        g = int(hex_color[2:4], 16)
-        b = int(hex_color[4:6], 16)
+    def PanelCouleurTkinter(self, titreFenetre):
+        return askcolor(title=f"Couleur {titreFenetre}")
+    
+    def luminosityColor(self, hexColor):
+        hexColor = hexColor.lstrip('#')
+        r = int(hexColor[0:2], 16)
+        g = int(hexColor[2:4], 16)
+        b = int(hexColor[4:6], 16)
         # Calcule la luminosité perçue
         luminosity = (0.299 * r + 0.587 * g + 0.114 * b)
     
         # Choisit le texte en fonction de la luminosité
         return '#000000' if luminosity > 186 else '#FFFFFF'
-    
-    reponseUtilisateur = askquestion("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
-    if reponseUtilisateur == 'no':
-        colors = askcolor(title="Couleur trait")
-        couleurInverse = luminosityColor(str(colors[1]))
-        cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
-        bouttonChoixCouleur.configure(text="Couleur : Définie")
-    else:
-        cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
-        bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
 
-    
-    
 
-def TailleTraitAffichage(value):
-    textTailleTrait.config(text=f"Taille trait : {value}")
+    def ProfondeurAffichage(self, value, textProfondeur):
+        self.profondeur = value
+        textProfondeur.config(text=f"Profondeur : {value}")
 
-def ClearMaKe(fig):
-    reponseUtilisateur = askquestion("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
-    if reponseUtilisateur == 'yes':
-        a = 1 ### Faire appel au script de génération de l'image (en passant la classe object pour avoir les bonnes infos je pense) ## module à faire
+    def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
+        reponseUtilisateur = self.QuestionTkinter("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
+        if reponseUtilisateur == 'no':
+            colors = self.PanelCouleurTkinter(titreFenetre='trait')
+            luminosity = self.luminosityColor(hexColor=str(colors[1]))
+            cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
+            bouttonChoixCouleur.configure(text="Couleur : Définie")   
+            self.couleurTrait = str(colors[1])    
+        else:
+            cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
+            bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
+            self.couleurTrait = "Random"
 
-    fig.clear()  
-    fig.set_facecolor("#ffffff") # pour check que les modifs se font bien
-    canvas.draw()
+    def TailleTraitAffichage(self, value, textTailleTrait):
+        self.tailleTrait = value
+        textTailleTrait.config(text=f"Taille trait : {value}")
 
-def ChoixBackground(fig):
-    def luminosityColor(hex_color):
-        hex_color = hex_color.lstrip('#')
-        r = int(hex_color[0:2], 16)
-        g = int(hex_color[2:4], 16)
-        b = int(hex_color[4:6], 16)
-        # Calcule la luminosité perçue
-        luminosity = (0.299 * r + 0.587 * g + 0.114 * b)
-    
-        # Choisit le texte en fonction de la luminosité
-        return '#000000' if luminosity > 186 else '#FFFFFF'
-    
-    colors = askcolor(title="Couleur Arrière Plan")
-    couleurInverse = luminosityColor(str(colors[1]))
-    cadreVisuelBackground.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
-    fig.set_facecolor(f"{colors[1]}")
-    canvas.draw()
 
+    def ClearMake(self, cadreVisuelBackground):
+        reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
+        if reponseUtilisateur == "yes":
+            a = 1 ### Faire appel au script de génération de l'image (en passant la classe object pour avoir les bonnes infos je pense) ## module à faire
+
+        self.fig.clear()
+        self.fig.set_facecolor("#ffffff") # pour check que les modifs se font bien
+        self.canvas.draw()
+        cadreVisuelBackground.configure(bg = "#ffffff", text="#ffffff")
+
+
+    def ChoixBackground(self, cadreVisuelBackground):
+        colors = self.PanelCouleurTkinter(titreFenetre='Arrière Plan')
+        luminosity = self.luminosityColor(hexColor=str(colors[1]))
+        cadreVisuelBackground.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
+        self.fig.set_facecolor(f"{colors[1]}")
+        self.canvas.draw()
+        self.couleurBackground = str(colors[1])
+        
 
     
     
@@ -106,13 +104,13 @@ valeurProfondeur = StringVar()
 valeurProfondeur.set(5)
 textProfondeur = Label(box1Profondeur, text=f"Profondeur : {valeurProfondeur.get()}")
 textProfondeur.pack(fill='x')
-scrollBarProfondeur = Scale(box1Profondeur, variable=valeurProfondeur,orient='horizontal',from_=1, to=11,showvalue=0, command=ProfondeurAffichage)
+scrollBarProfondeur = Scale(box1Profondeur, variable=valeurProfondeur,orient='horizontal',from_=1, to=11,showvalue=0, command=lambda value:object1.ProfondeurAffichage(value=value, textProfondeur=textProfondeur))
 scrollBarProfondeur.pack(fill='x')
 
 # Box2 : Couleur
 box2Couleur = Frame(framePanelModif, bg=None)
 box2Couleur.pack(pady=5, padx=5, fill='x')
-bouttonChoixCouleur = Button(box2Couleur, text="Couleur : ▶️", command=ChoixCouleur)
+bouttonChoixCouleur = Button(box2Couleur, text="Couleur : ▶️", command=lambda:object1.ChoixCouleur(cadreVisuelCouleur=cadreVisuelCouleur, bouttonChoixCouleur=bouttonChoixCouleur))
 bouttonChoixCouleur.pack(fill='x')
 cadreVisuelCouleur = Label(box2Couleur, bg = "#c3c3c3", text="#c3c3c3")
 cadreVisuelCouleur.pack(fill='x')
@@ -124,7 +122,7 @@ valeurTailleTrait = StringVar()
 valeurTailleTrait.set(5)
 textTailleTrait = Label(box3TailleTrait, text=f"Taille trait : {valeurTailleTrait.get()}")
 textTailleTrait.pack(fill='x')
-scrollBarTailleTrait = Scale(box3TailleTrait, variable=valeurTailleTrait, orient='horizontal', from_=1, to=11, showvalue=0, command=TailleTraitAffichage)
+scrollBarTailleTrait = Scale(box3TailleTrait, variable=valeurTailleTrait, orient='horizontal', from_=1, to=11, showvalue=0, command=lambda value:object1.TailleTraitAffichage(value = value, textTailleTrait=textTailleTrait))
 scrollBarTailleTrait.pack(fill='x')
 
 # Box 4 : Clear Canva Matplotlib
@@ -132,16 +130,18 @@ box4Clear = Frame(framePanelModif, bg = None)
 box4Clear.pack(pady=5, padx=5,fill='x')
 textButtonClear = Label(box4Clear, text="Nettoyage Toile")
 textButtonClear.pack()
-buttonClear = Button(box4Clear, text="Clear !", command=lambda:ClearMaKe(fig))
+buttonClear = Button(box4Clear, text="Clear !", command=lambda:object1.ClearMake(cadreVisuelBackground=cadreVisuelBackground))
 buttonClear.pack(fill='x')
 
 # Box 5 : ArrièrePlan
 box5Background = Frame(framePanelModif, bg= None)
 box5Background.pack(fill='x', padx=5, pady=5)
-butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️", command=lambda:ChoixBackground(fig))
+butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️", command=lambda:object1.ChoixBackground(cadreVisuelBackground=cadreVisuelBackground))
 butttonChoixBackground.pack(fill='x')
 cadreVisuelBackground = Label(box5Background, bg = "#ffffff", text="#ffffff")
 cadreVisuelBackground.pack(fill='x')
+
+
 
 # Box du canvas et btn img + pause -------------------------------------------------------
 frameBoxCanvas = Frame(fenetre, bg=bgFramePanelModif)
@@ -165,6 +165,7 @@ buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
 buttonMakePlotToImg = Button(frameBoxButton, bg="white", width=15)
 buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
 
+object1 = SetupFractale(1,1,1,1,fig=fig, canvas=canvas)
 
 
 
