@@ -3,6 +3,7 @@
 from Fractales import MainFractales
 from tkinter import *
 from tkinter.colorchooser import askcolor
+from tkinter.messagebox import askquestion
 from turtle import *
 from numpy import *
 import matplotlib.pyplot as plt
@@ -26,6 +27,20 @@ def ChoixCouleur():
     colors = askcolor(title="Tkinter Color Chooser")
     couleurInverse = luminosityColor(str(colors[1]))
     cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
+
+def TailleTraitAffichage(value):
+    textTailleTrait.config(text=f"Taille trait : {value}")
+
+def ClearMaKe(fig):
+    reponseUtilisateur = askquestion("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
+    if reponseUtilisateur == 'yes':
+        a = 1 ### Faire appel au script de génération de l'image (en passant la classe object pour avoir les bonnes infos je pense) ## module à faire
+
+    fig.clear()  
+    fig.set_facecolor("white") # pour check que les modifs se font bien
+    canvas.draw()
+
+
     
     
 # Tool Box
@@ -46,21 +61,39 @@ framePanelModif.pack(side=LEFT, expand=False, fill='y', padx=10, pady=10)
 
 # Box1 : Profondeur
 box1Profondeur = Frame(framePanelModif, bg = None)
-box1Profondeur.pack(padx = 5, pady = 5)
+box1Profondeur.pack(padx = 5, pady = 5, fill='x')
 valeurProfondeur = StringVar()
 valeurProfondeur.set(5)
 textProfondeur = Label(box1Profondeur, text=f"Profondeur : {valeurProfondeur.get()}")
-textProfondeur.pack()
+textProfondeur.pack(fill='x')
 scrollBarProfondeur = Scale(box1Profondeur, variable=valeurProfondeur,orient='horizontal',from_=1, to=11,showvalue=0, command=ProfondeurAffichage)
-scrollBarProfondeur.pack()
+scrollBarProfondeur.pack(fill='x')
 
 # Box2 : Couleur
-box2Coueur = Frame(framePanelModif, bg=None)
-box2Coueur.pack(pady=5, padx=5, fill='x')
-bouttonChoixCouleur = Button(box2Coueur, text="Couleur : ▶️", command=ChoixCouleur)
-bouttonChoixCouleur.pack()
-cadreVisuelCouleur = Label(box2Coueur, bg = "#c3c3c3", text="#c3c3c3")
+box2Couleur = Frame(framePanelModif, bg=None)
+box2Couleur.pack(pady=5, padx=5, fill='x')
+bouttonChoixCouleur = Button(box2Couleur, text="Couleur : ▶️", command=ChoixCouleur)
+bouttonChoixCouleur.pack(fill='x')
+cadreVisuelCouleur = Label(box2Couleur, bg = "#c3c3c3", text="#c3c3c3")
 cadreVisuelCouleur.pack(fill='x')
+
+# Box 3 : Taille trait
+box3TailleTrait = Frame(framePanelModif, bg = None)
+box3TailleTrait.pack(pady=5,padx=5,fill='x')
+valeurTailleTrait = StringVar()
+valeurTailleTrait.set(5)
+textTailleTrait = Label(box3TailleTrait, text=f"Taille trait : {valeurTailleTrait.get()}")
+textTailleTrait.pack(fill='x')
+scrollBarTailleTrait = Scale(box3TailleTrait, variable=valeurTailleTrait, orient='horizontal', from_=1, to=11, showvalue=0, command=TailleTraitAffichage)
+scrollBarTailleTrait.pack(fill='x')
+
+# Box 4 : Clear Canva Matplotlib
+box4Clear = Frame(framePanelModif, bg = None)
+box4Clear.pack(pady=5, padx=5,fill='x')
+textButtonClear = Label(box4Clear, text="Nettoyage Toile")
+textButtonClear.pack()
+buttonClear = Button(box4Clear, text="Clear !", command=lambda:ClearMaKe(fig))
+buttonClear.pack(fill='x')
 
 # Box du canvas et btn img + pause -------------------------------------------------------
 frameBoxCanvas = Frame(fenetre, bg=bgFramePanelModif)
