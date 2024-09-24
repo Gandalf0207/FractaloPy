@@ -8,6 +8,7 @@ from turtle import *
 from numpy import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import time
 
 class SetupFractale(object):
 
@@ -18,6 +19,12 @@ class SetupFractale(object):
         self.couleurBackground = couleurBackground
         self.fig = fig
         self.canvas = canvas
+        
+        self.checkModifProfondeur = False
+        self.checkModifAffichage = False
+        self.checkModifCouleur = False
+        self.checkModifTailleTrait = False
+        self.checkModifBackground = False
 
     def QuestionTkinter(self, titreFenetre, textFenetre):
         return askquestion(titreFenetre, textFenetre)
@@ -40,6 +47,7 @@ class SetupFractale(object):
     def ProfondeurAffichage(self, value, textProfondeur):
         self.profondeur = value
         textProfondeur.config(text=f"Profondeur : {value}")
+        self.ModifProfondeur = True
 
     def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
         reponseUtilisateur = self.QuestionTkinter("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
@@ -53,11 +61,12 @@ class SetupFractale(object):
             cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
             bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
             self.couleurTrait = "Random"
+        self.ModifCouleur = True
 
     def TailleTraitAffichage(self, value, textTailleTrait):
         self.tailleTrait = value
         textTailleTrait.config(text=f"Taille trait : {value}")
-
+        self.ModifAffichage = True
 
     def ClearMake(self, cadreVisuelBackground):
         reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
@@ -69,7 +78,6 @@ class SetupFractale(object):
         self.canvas.draw()
         cadreVisuelBackground.configure(bg = "#ffffff", text="#ffffff")
 
-
     def ChoixBackground(self, cadreVisuelBackground):
         colors = self.PanelCouleurTkinter(titreFenetre='Arrière Plan')
         luminosity = self.luminosityColor(hexColor=str(colors[1]))
@@ -77,6 +85,52 @@ class SetupFractale(object):
         self.fig.set_facecolor(f"{colors[1]}")
         self.canvas.draw()
         self.couleurBackground = str(colors[1])
+        self.ModifBackground = True
+
+    def LancerPauseAppel(self):
+        if self.ModifProfondeur ==False
+        LancerPauseImageObject = LancerPauseImage(self,self.profondeur, self.couleurTrait, self.tailleTrait, self.couleurBackground, self.fig, self.canvas, self.ModifProfondeur, self.ModifAffichage, self.ModifCouleur, self.ModifTailleTrait, self.ModifBackground)
+    
+    def SetAllModifFalse(self):
+        self.checkModifProfondeur = False
+        self.checkModifAffichage = False
+        self.checkModifCouleur = False
+        self.checkModifTailleTrait = False
+        self.checkModifBackground = False    
+
+class LancerPauseImage(SetupFractale):
+
+    def __init__(self,profondeur, couleurTrait, tailleTrait, couleurBackground, fig, canvas, ModifProfondeur, ModifAffichage, ModifCouleur, ModifTailleTrait, ModifBackground) -> None:
+        SetupFractale.__init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, fig, canvas)
+
+        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait, self.couleurBackground, self.fig, self.canvas)
+        self.liste = []
+        self.checkLancer = True
+
+    
+
+    def SelectLancerPause(self):
+        super().SetAllModifFalse()
+        if self.checkLancer ==True:
+            self.checkLancer = False
+            self.Lancer()
+        else:
+            self.checkLancer = True
+            self.Pause()
+
+
+    def Lancer(self):
+        self.MainFractalesGestionObject.Lancer()
+
+    def Pause(self):
+        self.MainFractalesGestionObject.Pause()
+
+
+#mettre à kjour fractale gestion object au cas par cas selon les modifs
+
+
+
+        
         
 
 
