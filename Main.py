@@ -19,12 +19,14 @@ class SetupFractale(object):
         self.couleurBackground = couleurBackground
         self.fig = fig
         self.canvas = canvas
+        self.fractaleType = None
         
         self.checkModifProfondeur = False
-        self.checkModifAffichage = False
         self.checkModifCouleur = False
         self.checkModifTailleTrait = False
-        self.checkModifBackground = False
+
+        self.checkLancer = True
+        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait, self.fig, self.canvas)
 
     def QuestionTkinter(self, titreFenetre, textFenetre):
         return askquestion(titreFenetre, textFenetre)
@@ -47,7 +49,7 @@ class SetupFractale(object):
     def ProfondeurAffichage(self, value, textProfondeur):
         self.profondeur = value
         textProfondeur.config(text=f"Profondeur : {value}")
-        self.ModifProfondeur = True
+        self.checkModifProfondeur = True
 
     def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
         reponseUtilisateur = self.QuestionTkinter("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
@@ -61,12 +63,12 @@ class SetupFractale(object):
             cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
             bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
             self.couleurTrait = "Random"
-        self.ModifCouleur = True
+        self.checkModifCouleur = True
 
     def TailleTraitAffichage(self, value, textTailleTrait):
         self.tailleTrait = value
         textTailleTrait.config(text=f"Taille trait : {value}")
-        self.ModifAffichage = True
+        self.checkModifTailleTrait = True
 
     def ClearMake(self, cadreVisuelBackground):
         reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
@@ -85,32 +87,9 @@ class SetupFractale(object):
         self.fig.set_facecolor(f"{colors[1]}")
         self.canvas.draw()
         self.couleurBackground = str(colors[1])
-        self.ModifBackground = True
+        
 
-    def LancerPauseAppel(self):
-        if self.ModifProfondeur ==False
-        LancerPauseImageObject = LancerPauseImage(self,self.profondeur, self.couleurTrait, self.tailleTrait, self.couleurBackground, self.fig, self.canvas, self.ModifProfondeur, self.ModifAffichage, self.ModifCouleur, self.ModifTailleTrait, self.ModifBackground)
-    
-    def SetAllModifFalse(self):
-        self.checkModifProfondeur = False
-        self.checkModifAffichage = False
-        self.checkModifCouleur = False
-        self.checkModifTailleTrait = False
-        self.checkModifBackground = False    
-
-class LancerPauseImage(SetupFractale):
-
-    def __init__(self,profondeur, couleurTrait, tailleTrait, couleurBackground, fig, canvas, ModifProfondeur, ModifAffichage, ModifCouleur, ModifTailleTrait, ModifBackground) -> None:
-        SetupFractale.__init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, fig, canvas)
-
-        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait, self.couleurBackground, self.fig, self.canvas)
-        self.liste = []
-        self.checkLancer = True
-
-    
-
-    def SelectLancerPause(self):
-        super().SetAllModifFalse()
+    def LancerPauseAppel(self): # a voir
         if self.checkLancer ==True:
             self.checkLancer = False
             self.Lancer()
@@ -120,14 +99,27 @@ class LancerPauseImage(SetupFractale):
 
 
     def Lancer(self):
-        self.MainFractalesGestionObject.Lancer()
+        if ((self.checkModifProfondeur == False) and (self.checkModifCouleur == False) and (self.checkModifTailleTrait == False)):
+            pass
+        else:
+            if self.checkModifProfondeur == True:
+                self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait, self.fig, self.canvas)
+            else:
+                if self.checkModifCouleur == True:
+                    self.MainFractalesGestionObject.ChangerCouleur(self.couleurTrait)
+                if self.checkModifTailleTrait == True:
+                    self.MainFractalesGestionObject.ChangerTailleTrait(self.tailleTrait)
+
+        self.MainFractalesGestionObject.Lancer(self.fractaleType)
+        
 
     def Pause(self):
         self.MainFractalesGestionObject.Pause()
 
-
-#mettre à kjour fractale gestion object au cas par cas selon les modifs
-
+    def SetAllModifFalse(self):
+        self.checkModifProfondeur = False
+        self.checkModifCouleur = False
+        self.checkModifTailleTrait = False
 
 
         
@@ -163,7 +155,7 @@ framePanelModif.pack(side=LEFT, expand=False, fill='y', padx=10, pady=10)
 # Box1 : Profondeur
 box1Profondeur = Frame(framePanelModif, bg = None)
 box1Profondeur.pack(padx = 5, pady = 5, fill='x')
-valeurProfondeur = StringVar()
+valeurProfondeur =  IntVar()
 valeurProfondeur.set(5)
 textProfondeur = Label(box1Profondeur, text=f"Profondeur : {valeurProfondeur.get()}")
 textProfondeur.pack(fill='x')
@@ -181,7 +173,7 @@ cadreVisuelCouleur.pack(fill='x')
 # Box 3 : Taille trait
 box3TailleTrait = Frame(framePanelModif, bg = None)
 box3TailleTrait.pack(pady=5,padx=5,fill='x')
-valeurTailleTrait = StringVar()
+valeurTailleTrait = IntVar()
 valeurTailleTrait.set(5)
 textTailleTrait = Label(box3TailleTrait, text=f"Taille trait : {valeurTailleTrait.get()}")
 textTailleTrait.pack(fill='x')
@@ -221,7 +213,7 @@ frameBoxButton = Frame(frameBoxCanvas, bg="blue")
 frameBoxButton.pack(side=BOTTOM, fill='x')
 
 # Boutton lancer pause (gauche)
-buttonLancerPause = Button(frameBoxButton, bg='white', width=15)
+buttonLancerPause = Button(frameBoxButton, bg='white', width=15, command=lambda:object1.LancerPauseAppel())
 buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
 
 # Boutton Générer une image (droite)
