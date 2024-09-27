@@ -12,21 +12,19 @@ import time
 
 class SetupFractale(object):
 
-    def __init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, fig, canvas) -> None:
+    def __init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, turtle, screen) -> None:
         self.profondeur = profondeur
         self.couleurTrait = couleurTrait
         self.tailleTrait = tailleTrait
         self.couleurBackground = couleurBackground
-        self.fig = fig
-        self.canvas = canvas
+        self.turtle = turtle
+        self.screen = screen
         self.fractaleType = None
-        
-        self.checkModifProfondeur = False
-        self.checkModifCouleur = False
-        self.checkModifTailleTrait = False
 
-        self.checkLancer = True
-        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait, self.fig, self.canvas)
+        # Nouveaux attributs
+        self.isPaused = True # Indique si le processus est en pause
+
+        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait,self.turtle, self.screen)
 
     def QuestionTkinter(self, titreFenetre, textFenetre):
         return askquestion(titreFenetre, textFenetre)
@@ -34,7 +32,7 @@ class SetupFractale(object):
     def PanelCouleurTkinter(self, titreFenetre):
         return askcolor(title=f"Couleur {titreFenetre}")
     
-    def luminosityColor(self, hexColor):
+    def luminosityColor(self, hexColor):    
         hexColor = hexColor.lstrip('#')
         r = int(hexColor[0:2], 16)
         g = int(hexColor[2:4], 16)
@@ -47,9 +45,9 @@ class SetupFractale(object):
 
 
     def ProfondeurAffichage(self, value, textProfondeur):
-        self.profondeur = value
+        self.profondeur = int(value)
         textProfondeur.config(text=f"Profondeur : {value}")
-        self.checkModifProfondeur = True
+        self.MainFractalesGestionObject.ChangerProfondeur(self.profondeur)
 
     def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
         reponseUtilisateur = self.QuestionTkinter("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
@@ -58,7 +56,8 @@ class SetupFractale(object):
             luminosity = self.luminosityColor(hexColor=str(colors[1]))
             cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
             bouttonChoixCouleur.configure(text="Couleur : Définie")   
-            self.couleurTrait = str(colors[1])    
+            self.couleurTrait = str(colors[1])  
+            self.MainFractalesGestionObject.ChangerCouleur(self.couleurTrait)  
         else:
             cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
             bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
@@ -66,9 +65,10 @@ class SetupFractale(object):
         self.checkModifCouleur = True
 
     def TailleTraitAffichage(self, value, textTailleTrait):
-        self.tailleTrait = value
+        self.tailleTrait = int(value)
         textTailleTrait.config(text=f"Taille trait : {value}")
         self.checkModifTailleTrait = True
+        self.MainFractalesGestionObject.ChangerTailleTrait(self.tailleTrait)
 
     def ClearMake(self, cadreVisuelBackground):
         reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
@@ -89,37 +89,23 @@ class SetupFractale(object):
         self.couleurBackground = str(colors[1])
         
 
-    def LancerPauseAppel(self): # a voir
-        if self.checkLancer ==True:
-            self.checkLancer = False
-            self.Lancer()
-        else:
-            self.checkLancer = True
+    # Méthode pour gérer le bouton pause/lancer
+    def LancerPauseAppel(self):
+        if not self.isPaused:
+            self.isPaused = True
             self.Pause()
+        else:
+            self.isPaused = False
+            self.Lancer()
 
 
     def Lancer(self):
-        if ((self.checkModifProfondeur == False) and (self.checkModifCouleur == False) and (self.checkModifTailleTrait == False)):
-            pass
-        else:
-            if self.checkModifProfondeur == True:
-                self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait, self.fig, self.canvas)
-            else:
-                if self.checkModifCouleur == True:
-                    self.MainFractalesGestionObject.ChangerCouleur(self.couleurTrait)
-                if self.checkModifTailleTrait == True:
-                    self.MainFractalesGestionObject.ChangerTailleTrait(self.tailleTrait)
-
         self.MainFractalesGestionObject.Lancer(self.fractaleType)
         
 
     def Pause(self):
         self.MainFractalesGestionObject.Pause()
 
-    def SetAllModifFalse(self):
-        self.checkModifProfondeur = False
-        self.checkModifCouleur = False
-        self.checkModifTailleTrait = False
 
 
         
@@ -199,22 +185,34 @@ cadreVisuelBackground.pack(fill='x')
 
 
 # Box du canvas et btn img + pause -------------------------------------------------------
-frameBoxCanvas = Frame(fenetre, bg=bgFramePanelModif)
+frameBoxCanvas = Frame(fenetre, bg = None)
 frameBoxCanvas.pack(expand=True, fill=BOTH)
 
-# Création de la figure dans Tkinter
-fig = plt.Figure(dpi=94)
-fig.set_facecolor("#ffffff")
-canvas = FigureCanvasTkAgg(fig, master=frameBoxCanvas)  # Mettre la figure dans Tkinter
-canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True, padx = 10, pady = 10)
+canvasturtle = ScrolledCanvas(frameBoxCanvas)
+canvasturtle.pack(expand=True, fill=BOTH)
+
+# Set up the turtle screen using the canvas
+screen = TurtleScreen(canvasturtle)
+
+# Create a turtle instance attached to the screen
+turtle = RawTurtle(screen)
+
 
 # Box boutton pause et generation d'image
 frameBoxButton = Frame(frameBoxCanvas, bg="blue")
 frameBoxButton.pack(side=BOTTOM, fill='x')
 
-# Boutton lancer pause (gauche)
-buttonLancerPause = Button(frameBoxButton, bg='white', width=15, command=lambda:object1.LancerPauseAppel())
+# Bouton lancer/pause (gauche)
+buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause())
 buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
+
+# Fonction pour mettre à jour le bouton et l'état
+def toggle_pause():
+    if object1.isPaused:
+        buttonLancerPause.config(text="Pause")
+    else:
+        buttonLancerPause.config(text="Lancer")
+    object1.LancerPauseAppel()
 
 # Boutton Générer une image (droite)
 buttonMakePlotToImg = Button(frameBoxButton, bg="white", width=15)
@@ -222,7 +220,7 @@ buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
 
 
 # Initialisation de l'objet
-object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',tailleTrait=5,couleurBackground="#ffffff",fig=fig, canvas=canvas)
+object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',tailleTrait=5,couleurBackground="#ffffff", turtle=turtle, screen= screen)
 
 
 
