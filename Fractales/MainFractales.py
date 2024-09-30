@@ -22,22 +22,7 @@ class MainFractaleGestion(object):
     def Lancer(self, fractaleType):
         # Réinitialiser les variables à chaque lancement
         self.isPaused = False
-        self.segment_stack = []  # Liste qui va contenir les segments à dessiner
-        self.turtle.clear()  # Efface le dessin actuel
-
-        # Initialisation du flocon de Koch : triangle équilatéral
-        side_length = 200  # Taille du côté du triangle initial
-
-        # Commencer à dessiner le flocon de Koch
-        self.turtle.penup()
-        self.turtle.goto(-side_length / 2, -100)  # Positionner au point de départ
-        self.turtle.pendown()
-
-        # Dessiner les 3 côtés du triangle initial
-        for _ in range(3):
-            self.dessiner_fractale(side_length, self.profondeur)
-            self.turtle.left(120)  # Tourner pour le triangle équilatéral
-
+        
     def ChangerCouleur(self, newCouleurTrait):
         self.couleurTrait = newCouleurTrait
         self.turtle.pencolor(self.couleurTrait)
@@ -46,34 +31,40 @@ class MainFractaleGestion(object):
         self.tailleTrait = newTailleTrait
         self.turtle.pensize(self.tailleTrait)
 
-    def dessiner_fractale(self, longueur, profondeur):
-        stack = [(longueur, profondeur)]  # Pile pour stocker les segments à traiter
-
-        while stack:
-            if self.isPaused:  # Pause si nécessaire
-                return
-
-            longueur, profondeur = stack.pop()
-
-            if profondeur == 0:  # Cas de base, dessiner une ligne droite
-                self.turtle.forward(longueur)
-            else:
-                # Ajouter les segments de la fractale dans la pile (en ordre inverse)
-                self.segment_stack.append((longueur / 3, profondeur - 1))
-                self.segment_stack.append((longueur / 3, profondeur - 1))
-                self.segment_stack.append((longueur / 3, profondeur - 1))
-                self.segment_stack.append((longueur / 3, profondeur - 1))
-
-                # Ajouter les virages (angles) dans la pile
-                self.segment_stack.append("LEFT_60")
-                self.segment_stack.append((longueur / 3, profondeur - 1))
-                self.segment_stack.append("RIGHT_120")
-                self.segment_stack.append((longueur / 3, profondeur - 1))
-                self.segment_stack.append("LEFT_60")
-                self.segment_stack.append((longueur / 3, profondeur - 1))
-
-
-            self.screen.update()
+class Fractale_Fibonacci:
+    def __init__(self, nombre, longueur):
+        """Initialisation de la fractale du mot de fibonacci"""
+        self.nombre = nombre
+        self.longueur = longueur
+    def liste(self,n):
+        if n == 1:
+            return "B"
+        elif n == 2:
+            return self.liste(n-1) + "A"
+        elif n > 2:
+            return self.liste(n-1) + self.liste(n-2)
+    def dessiner_Fibonacci(self, nombre, l):
+        pendown()
+        mot = self.liste(nombre)
+        mot = list(mot)
+        for i in range(len(mot)):
+            if mot[i] == "B":
+                forward(l)
+            elif mot[i] == "A":
+                if (i+1)%2 == 0:
+                    right(90)
+                elif (i+1)%2 != 0:
+                    left(90)
+                forward(l)
+    def dessiner(self):
+        self.dessiner_Fibonacci(self.nombre, self.longueur)
+if __name__ == "__main__":
+    fractale = Fractale_Fibonacci(30, 2)  # CrÃ©er une instance de FractaleKoch avec profondeur 3 et longueur 200
+    penup()
+    goto(-100,0)
+    pendown()
+    fractale.dessiner()  # Dessiner la fractale
+    mainloop()
 
     # Méthode pour gérer la pause
     def Pause(self):
