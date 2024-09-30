@@ -24,12 +24,6 @@ class FractaleKoch:
         self.dessiner_koch(self.profondeur, self.longueur)
 
 
-# Utilisation de la classe FractaleKoch
-if __name__ == "__main__":
-    fractale = FractaleKoch(3, 200)  # Créer une instance de FractaleKoch avec profondeur 3 et longueur 200
-    fractale.dessiner()  # Dessiner la fractale
-    mainloop()
-
 class FractaleVicsek:
     def __init__(self, nombre, longueur):
         """Initialisation de la fractale de Vicsek"""
@@ -78,10 +72,6 @@ class FractaleVicsek:
     def dessiner(self):
         """Méthode pour dessiner la fractale"""
         self.dessiner_Vicsek(self.nombre, self.longueur)
-if __name__ == "__main__":
-    fractale = FractaleVicsek(3, 200)  # Créer une instance de FractaleKoch avec profondeur 3 et longueur 200
-    fractale.dessiner()  # Dessiner la fractale
-    mainloop()
 
 class Fractale_Fibonacci:
     def __init__(self, nombre, longueur):
@@ -110,10 +100,22 @@ class Fractale_Fibonacci:
                 forward(l)
     def dessiner(self):
         self.dessiner_Fibonacci(self.nombre, self.longueur)
+        
 if __name__ == "__main__":
     fractale = Fractale_Fibonacci(30, 2)  # CrÃ©er une instance de FractaleKoch avec profondeur 3 et longueur 200
     penup()
     goto(-100,0)
     pendown()
+    fractale.dessiner()  # Dessiner la fractale
+    mainloop()
+
+if __name__ == "__main__":
+    fractale = FractaleVicsek(3, 200)  # Créer une instance de FractaleKoch avec profondeur 3 et longueur 200
+    fractale.dessiner()  # Dessiner la fractale
+    mainloop()
+
+# Utilisation de la classe FractaleKoch
+if __name__ == "__main__":
+    fractale = FractaleKoch(3, 200)  # Créer une instance de FractaleKoch avec profondeur 3 et longueur 200
     fractale.dessiner()  # Dessiner la fractale
     mainloop()
