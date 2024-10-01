@@ -177,6 +177,7 @@ cadreVisuelBackground.pack(fill='x')
 
 
 
+
 # Box du canvas et btn img + pause -------------------------------------------------------
 frameBoxCanvas = Frame(fenetre, bg = None)
 frameBoxCanvas.pack(expand=True, fill=BOTH)
