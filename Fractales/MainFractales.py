@@ -11,7 +11,6 @@ class MainFractaleGestion(object):
         self.screen = screen
         self.fractale = None  # La fractale courante
         self.isFinished = True
-        self.coords= (0,0)
 
     def ChangerProfondeur(self, profondeur):
         self.profondeur = profondeur
@@ -25,9 +24,7 @@ class MainFractaleGestion(object):
 
     def Lancer(self, fractaleType):
         self.isPaused = False
-        self.turtle.penup()
-        self.turtle.goto(self.coords)
-        self.turtle.pendown()
+
         # Sélectionne et dessine la fractale en fonction du type
         if fractaleType == "Sierpinski" and self.isFinished == True:
             self.isFinished = False
@@ -47,7 +44,6 @@ class MainFractaleGestion(object):
 
     def Pause(self):
         self.isPaused = True
-        self.coords = self.turtle.pos()
 
 
 
@@ -55,17 +51,24 @@ class Fractale_Sierpinski:
     def __init__(self, nombre, longueur, gestionnaire):
         self.nombre = nombre
         self.longueur = longueur
-        self.gestionnaire = gestionnaire  # Initialisation du gestionnaire
+        self.gestionnaire = gestionnaire
+        self.state = []  # Pile pour sauvegarder l'état de la récursion
 
     def dessiner_sierpinski(self, n, l):
-        self.gestionnaire.turtle.speed(1000)
+        # Sauvegarde de l'état actuel si on met en pause
+        if self.gestionnaire.isPaused:
+            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
+            return  # Arrêt temporaire
+
+        # Paramétrage de la tortue
+        self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
-        if n == 0 and not self.gestionnaire.isPaused:
+
+        if n == 0:
             for i in range(3):
                 self.gestionnaire.turtle.forward(l)
                 self.gestionnaire.turtle.left(120)
-
-        elif not self.gestionnaire.isPaused:
+        else:
             self.dessiner_sierpinski(n - 1, l / 2)
             self.gestionnaire.turtle.forward(l / 2)
             self.dessiner_sierpinski(n - 1, l / 2)
@@ -78,10 +81,21 @@ class Fractale_Sierpinski:
             self.gestionnaire.turtle.backward(l / 2)
             self.gestionnaire.turtle.right(60)
 
-        # else:
-        #     self.nombre = n
-        #     self.longeur = l
-
+    def reprendre_dessin(self):
+        """Reprend le dessin depuis l'état sauvegardé"""
+        if self.state:
+            # Récupération de l'état sauvegardé
+            n, l, pos, heading = self.state.pop()
+            self.gestionnaire.turtle.penup()
+            self.gestionnaire.turtle.setposition(pos)
+            self.gestionnaire.turtle.setheading(heading)
+            self.gestionnaire.turtle.pendown()
+            self.dessiner_sierpinski(n, l)
+        else:
+            self.dessiner_sierpinski(self.nombre, self.longueur)
 
     def dessiner(self):
-        self.dessiner_sierpinski(self.nombre, self.longueur)
+        """Commence ou reprend le dessin"""
+        if not self.gestionnaire.isPaused:
+            self.reprendre_dessin()
+

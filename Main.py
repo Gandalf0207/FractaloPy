@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import time
 import turtle
+from PIL import ImageGrab
+from tkinter import filedialog
 
 
 class SetupFractale(object):
@@ -45,6 +47,28 @@ class SetupFractale(object):
         # Choisit le texte en fonction de la luminosité
         return '#000000' if luminosity > 186 else '#FFFFFF'
 
+    def SaveAsPng(self):
+        # Attendre un peu pour que l'écran ait le temps de se rafraîchir
+        time.sleep(1)
+        
+
+        # Obtenir le chemin du fichier à enregistrer (dialogue de sauvegarde)
+        file_path = filedialog.asksaveasfilename(defaultextension=".png",
+                                                 filetypes=[("PNG files", "*.png"), ("All files", "*.*")],
+                                                 title="Enregistrer sous")
+        
+        if file_path:
+            # Obtenir les dimensions de la fenêtre turtle
+            canvas = self.screen.getcanvas()
+            canvas.postscript(file="turtle_drawing.ps")  # Sauvegarder d'abord en PostScript
+
+            # Utiliser Pillow pour convertir en PNG directement à partir de PostScript
+            img = ImageGrab.grab(bbox=(canvas.winfo_rootx(), canvas.winfo_rooty(),
+                                    canvas.winfo_rootx() + canvas.winfo_width(),
+                                    canvas.winfo_rooty() + canvas.winfo_height()))
+            img.save(file_path)
+
+
 
     def ProfondeurAffichage(self, value, textProfondeur):
         self.profondeur = int(value)
@@ -73,19 +97,19 @@ class SetupFractale(object):
     def ClearMake(self, cadreVisuelBackground):
         reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
         if reponseUtilisateur == "yes":
-            a = 1 ### Faire appel au script de génération de l'image (en passant la classe object pour avoir les bonnes infos je pense) ## module à faire
-
-        self.fig.clear()
-        self.fig.set_facecolor("#ffffff") # pour check que les modifs se font bien
-        self.canvas.draw()
+            self.SaveAsPng()
+        self.turtle.clear()
+        self.screen.bgcolor("#ffffff") # pour check que les modifs se font bien
+        self.screen.update()
         cadreVisuelBackground.configure(bg = "#ffffff", text="#ffffff")
 
+    
     def ChoixBackground(self, cadreVisuelBackground):
         colors = self.PanelCouleurTkinter(titreFenetre='Arrière Plan')
         luminosity = self.luminosityColor(hexColor=str(colors[1]))
         cadreVisuelBackground.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
-        self.fig.set_facecolor(f"{colors[1]}")
-        self.canvas.draw()
+        self.screen.bgcolor(f"{colors[1]}")
+        self.screen.update()
         self.couleurBackground = str(colors[1])
         
 
@@ -206,7 +230,7 @@ def toggle_pause(typeFractale = None):
     object1.LancerPauseAppel(typeFractale)
 
 # Boutton Générer une image (droite)
-buttonMakePlotToImg = Button(frameBoxButton, bg="white", width=15)
+buttonMakePlotToImg = Button(frameBoxButton,text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
 buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
 
 
