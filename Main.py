@@ -8,64 +8,130 @@ from turtle import *
 from numpy import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import time
+import turtle
+from PIL import ImageGrab
+from tkinter import filedialog
 
-def ProfondeurAffichage(value):
-    textProfondeur.config(text=f"Profondeur : {value}")
 
-def ChoixCouleur():
-    def luminosityColor(hex_color):
-        hex_color = hex_color.lstrip('#')
-        r = int(hex_color[0:2], 16)
-        g = int(hex_color[2:4], 16)
-        b = int(hex_color[4:6], 16)
+class SetupFractale(object):
+
+    def __init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, turtle, screen) -> None:
+        self.profondeur = profondeur
+        self.couleurTrait = couleurTrait
+        self.tailleTrait = tailleTrait
+        self.couleurBackground = couleurBackground
+        self.turtle = turtle
+        self.screen = screen
+        self.fractaleType = None
+
+        # Nouveaux attributs
+        self.isPaused = True # Indique si le processus est en pause
+
+        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait,self.turtle, self.screen)
+
+    def QuestionTkinter(self, titreFenetre, textFenetre):
+        return askquestion(titreFenetre, textFenetre)
+
+    def PanelCouleurTkinter(self, titreFenetre):
+        return askcolor(title=f"Couleur {titreFenetre}")
+    
+    def luminosityColor(self, hexColor):    
+        hexColor = hexColor.lstrip('#')
+        r = int(hexColor[0:2], 16)
+        g = int(hexColor[2:4], 16)
+        b = int(hexColor[4:6], 16)
         # Calcule la luminosité perçue
         luminosity = (0.299 * r + 0.587 * g + 0.114 * b)
     
         # Choisit le texte en fonction de la luminosité
         return '#000000' if luminosity > 186 else '#FFFFFF'
-    
-    reponseUtilisateur = askquestion("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
-    if reponseUtilisateur == 'no':
-        colors = askcolor(title="Couleur trait")
-        couleurInverse = luminosityColor(str(colors[1]))
-        cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
-        bouttonChoixCouleur.configure(text="Couleur : Définie")
-    else:
-        cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
-        bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
+
+    def SaveAsPng(self):
+        # Attendre un peu pour que l'écran ait le temps de se rafraîchir
+        time.sleep(1)
+        
+
+        # Obtenir le chemin du fichier à enregistrer (dialogue de sauvegarde)
+        file_path = filedialog.asksaveasfilename(defaultextension=".png",
+                                                 filetypes=[("PNG files", "*.png"), ("All files", "*.*")],
+                                                 title="Enregistrer sous")
+        
+        if file_path:
+            # Obtenir les dimensions de la fenêtre turtle
+            canvas = self.screen.getcanvas()
+            canvas.postscript(file="turtle_drawing.ps")  # Sauvegarder d'abord en PostScript
+
+            # Utiliser Pillow pour convertir en PNG directement à partir de PostScript
+            img = ImageGrab.grab(bbox=(canvas.winfo_rootx(), canvas.winfo_rooty(),
+                                    canvas.winfo_rootx() + canvas.winfo_width(),
+                                    canvas.winfo_rooty() + canvas.winfo_height()))
+            img.save(file_path)
+
+
+
+    def ProfondeurAffichage(self, value, textProfondeur):
+        self.profondeur = int(value)
+        textProfondeur.config(text=f"Profondeur : {value}")
+        self.MainFractalesGestionObject.ChangerProfondeur(self.profondeur)
+
+    def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
+        reponseUtilisateur = self.QuestionTkinter("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
+        if reponseUtilisateur == 'no':
+            colors = self.PanelCouleurTkinter(titreFenetre='trait')
+            luminosity = self.luminosityColor(hexColor=str(colors[1]))
+            cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
+            bouttonChoixCouleur.configure(text="Couleur : Définie")   
+            self.couleurTrait = str(colors[1])  
+            self.MainFractalesGestionObject.ChangerCouleur(self.couleurTrait)  
+        else:
+            cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
+            bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
+            self.couleurTrait = "Random"
+
+    def TailleTraitAffichage(self, value, textTailleTrait):
+        self.tailleTrait = int(value)
+        textTailleTrait.config(text=f"Taille trait : {value}")
+        self.MainFractalesGestionObject.ChangerTailleTrait(self.tailleTrait)
+
+    def ClearMake(self, cadreVisuelBackground):
+        reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
+        if reponseUtilisateur == "yes":
+            self.SaveAsPng()
+        self.turtle.clear()
+        self.screen.bgcolor("#ffffff") # pour check que les modifs se font bien
+        self.screen.update()
+        cadreVisuelBackground.configure(bg = "#ffffff", text="#ffffff")
 
     
-    
+    def ChoixBackground(self, cadreVisuelBackground):
+        colors = self.PanelCouleurTkinter(titreFenetre='Arrière Plan')
+        luminosity = self.luminosityColor(hexColor=str(colors[1]))
+        cadreVisuelBackground.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
+        self.screen.bgcolor(f"{colors[1]}")
+        self.screen.update()
+        self.couleurBackground = str(colors[1])
+        
 
-def TailleTraitAffichage(value):
-    textTailleTrait.config(text=f"Taille trait : {value}")
+    # Méthode pour gérer le bouton pause/lancer
+    def LancerPauseAppel(self, typeFractale = None):
+        if not self.isPaused:
+            self.isPaused = True
+            self.MainFractalesGestionObject.Pause()
+        else:
+            self.isPaused = False
+            self.MainFractalesGestionObject.Lancer(typeFractale)
+            self.screen.update()  # Assurer que l'écran est mis à jour après chaque appel
+            toggle_pause(self.fractaleType)
 
-def ClearMaKe(fig):
-    reponseUtilisateur = askquestion("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
-    if reponseUtilisateur == 'yes':
-        a = 1 ### Faire appel au script de génération de l'image (en passant la classe object pour avoir les bonnes infos je pense) ## module à faire
 
-    fig.clear()  
-    fig.set_facecolor("#ffffff") # pour check que les modifs se font bien
-    canvas.draw()
 
-def ChoixBackground(fig):
-    def luminosityColor(hex_color):
-        hex_color = hex_color.lstrip('#')
-        r = int(hex_color[0:2], 16)
-        g = int(hex_color[2:4], 16)
-        b = int(hex_color[4:6], 16)
-        # Calcule la luminosité perçue
-        luminosity = (0.299 * r + 0.587 * g + 0.114 * b)
-    
-        # Choisit le texte en fonction de la luminosité
-        return '#000000' if luminosity > 186 else '#FFFFFF'
-    
-    colors = askcolor(title="Couleur Arrière Plan")
-    couleurInverse = luminosityColor(str(colors[1]))
-    cadreVisuelBackground.configure(bg = colors[1], text=str(colors[1]), fg=couleurInverse)
-    fig.set_facecolor(f"{colors[1]}")
-    canvas.draw()
+
+
+
+
+
+
 
 
     
@@ -89,17 +155,17 @@ framePanelModif.pack(side=LEFT, expand=False, fill='y', padx=10, pady=10)
 # Box1 : Profondeur
 box1Profondeur = Frame(framePanelModif, bg = None)
 box1Profondeur.pack(padx = 5, pady = 5, fill='x')
-valeurProfondeur = StringVar()
+valeurProfondeur =  IntVar()
 valeurProfondeur.set(5)
 textProfondeur = Label(box1Profondeur, text=f"Profondeur : {valeurProfondeur.get()}")
 textProfondeur.pack(fill='x')
-scrollBarProfondeur = Scale(box1Profondeur, variable=valeurProfondeur,orient='horizontal',from_=1, to=11,showvalue=0, command=ProfondeurAffichage)
+scrollBarProfondeur = Scale(box1Profondeur, variable=valeurProfondeur,orient='horizontal',from_=1, to=11,showvalue=0, command=lambda value:object1.ProfondeurAffichage(value=value, textProfondeur=textProfondeur))
 scrollBarProfondeur.pack(fill='x')
 
 # Box2 : Couleur
 box2Couleur = Frame(framePanelModif, bg=None)
 box2Couleur.pack(pady=5, padx=5, fill='x')
-bouttonChoixCouleur = Button(box2Couleur, text="Couleur : ▶️", command=ChoixCouleur)
+bouttonChoixCouleur = Button(box2Couleur, text="Couleur : ▶️", command=lambda:object1.ChoixCouleur(cadreVisuelCouleur=cadreVisuelCouleur, bouttonChoixCouleur=bouttonChoixCouleur))
 bouttonChoixCouleur.pack(fill='x')
 cadreVisuelCouleur = Label(box2Couleur, bg = "#c3c3c3", text="#c3c3c3")
 cadreVisuelCouleur.pack(fill='x')
@@ -107,11 +173,11 @@ cadreVisuelCouleur.pack(fill='x')
 # Box 3 : Taille trait
 box3TailleTrait = Frame(framePanelModif, bg = None)
 box3TailleTrait.pack(pady=5,padx=5,fill='x')
-valeurTailleTrait = StringVar()
-valeurTailleTrait.set(5)
+valeurTailleTrait = IntVar()
+valeurTailleTrait.set(200)
 textTailleTrait = Label(box3TailleTrait, text=f"Taille trait : {valeurTailleTrait.get()}")
 textTailleTrait.pack(fill='x')
-scrollBarTailleTrait = Scale(box3TailleTrait, variable=valeurTailleTrait, orient='horizontal', from_=1, to=11, showvalue=0, command=TailleTraitAffichage)
+scrollBarTailleTrait = Scale(box3TailleTrait, variable=valeurTailleTrait, orient='horizontal', from_=100, to=400, showvalue=0, command=lambda value:object1.TailleTraitAffichage(value = value, textTailleTrait=textTailleTrait))
 scrollBarTailleTrait.pack(fill='x')
 
 # Box 4 : Clear Canva Matplotlib
@@ -119,39 +185,70 @@ box4Clear = Frame(framePanelModif, bg = None)
 box4Clear.pack(pady=5, padx=5,fill='x')
 textButtonClear = Label(box4Clear, text="Nettoyage Toile")
 textButtonClear.pack()
-buttonClear = Button(box4Clear, text="Clear !", command=lambda:ClearMaKe(fig))
+buttonClear = Button(box4Clear, text="Clear !", command=lambda:object1.ClearMake(cadreVisuelBackground=cadreVisuelBackground))
 buttonClear.pack(fill='x')
 
 # Box 5 : ArrièrePlan
 box5Background = Frame(framePanelModif, bg= None)
 box5Background.pack(fill='x', padx=5, pady=5)
-butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️", command=lambda:ChoixBackground(fig))
+butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️", command=lambda:object1.ChoixBackground(cadreVisuelBackground=cadreVisuelBackground))
 butttonChoixBackground.pack(fill='x')
 cadreVisuelBackground = Label(box5Background, bg = "#ffffff", text="#ffffff")
 cadreVisuelBackground.pack(fill='x')
 
+
+
+
 # Box du canvas et btn img + pause -------------------------------------------------------
-frameBoxCanvas = Frame(fenetre, bg=bgFramePanelModif)
+frameBoxCanvas = Frame(fenetre, bg = None)
 frameBoxCanvas.pack(expand=True, fill=BOTH)
 
-# Création de la figure dans Tkinter
-fig = plt.Figure(dpi=94)
-fig.set_facecolor("#ffffff")
-canvas = FigureCanvasTkAgg(fig, master=frameBoxCanvas)  # Mettre la figure dans Tkinter
-canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True, padx = 10, pady = 10)
+canvasturtle = ScrolledCanvas(frameBoxCanvas)
+canvasturtle.pack(expand=True, fill=BOTH)
+
+# Set up the turtle screen using the canvas
+screen = TurtleScreen(canvasturtle)
+
+# Create a turtle instance attached to the screen
+turtle = RawTurtle(screen)
+screen.tracer(0)
 
 # Box boutton pause et generation d'image
 frameBoxButton = Frame(frameBoxCanvas, bg="blue")
 frameBoxButton.pack(side=BOTTOM, fill='x')
 
-# Boutton lancer pause (gauche)
-buttonLancerPause = Button(frameBoxButton, bg='white', width=15)
+# Bouton lancer/pause (gauche)
+buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause())
 buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
 
+# Fonction pour mettre à jour le bouton et l'état
+def toggle_pause(typeFractale = None):
+    if object1.isPaused:
+        buttonLancerPause.config(text="Pause")
+    else:
+        buttonLancerPause.config(text="Lancer")
+    object1.LancerPauseAppel(typeFractale)
+
 # Boutton Générer une image (droite)
-buttonMakePlotToImg = Button(frameBoxButton, bg="white", width=15)
+buttonMakePlotToImg = Button(frameBoxButton,text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
 buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
 
+
+# Ajout d'un menu pour le choix des fractales
+box6ChoixFractale = Frame(framePanelModif, bg=None)
+box6ChoixFractale.pack(pady=5, padx=5, fill='x')
+textChoixFractale = Label(box6ChoixFractale, text="Choix de la fractale :")
+textChoixFractale.pack(fill='x')
+
+fractaleType = StringVar(value="Sierpinski")  # Valeur par défaut
+choixFractaleMenu = OptionMenu(box6ChoixFractale, fractaleType, "Sierpinski")  # Ajouter d'autres types ici
+choixFractaleMenu.pack(fill='x')
+
+# Appel pour choisir et lancer la fractale
+buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
+
+# Initialisation de l'objet
+object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',tailleTrait=200,couleurBackground="#ffffff", turtle=turtle, screen= screen)
 
 
 
