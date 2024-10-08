@@ -16,10 +16,10 @@ from tkinter import filedialog
 
 class SetupFractale(object):
 
-    def __init__(self, profondeur, couleurTrait, tailleTrait, couleurBackground, turtle, screen) -> None:
+    def __init__(self, profondeur, couleurTrait, longueurTrait, couleurBackground, turtle, screen) -> None:
         self.profondeur = profondeur
         self.couleurTrait = couleurTrait
-        self.tailleTrait = tailleTrait
+        self.longueurTrait = longueurTrait
         self.couleurBackground = couleurBackground
         self.turtle = turtle
         self.screen = screen
@@ -28,7 +28,7 @@ class SetupFractale(object):
         # Nouveaux attributs
         self.isPaused = True # Indique si le processus est en pause
 
-        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.tailleTrait,self.turtle, self.screen)
+        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.longueurTrait,self.turtle, self.screen)
 
     def QuestionTkinter(self, titreFenetre, textFenetre):
         return askquestion(titreFenetre, textFenetre)
@@ -75,6 +75,7 @@ class SetupFractale(object):
         textProfondeur.config(text=f"Profondeur : {value}")
         self.MainFractalesGestionObject.ChangerProfondeur(self.profondeur)
 
+
     def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
         reponseUtilisateur = self.QuestionTkinter("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
         if reponseUtilisateur == 'no':
@@ -89,10 +90,10 @@ class SetupFractale(object):
             bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
             self.couleurTrait = "Random"
 
-    def TailleTraitAffichage(self, value, textTailleTrait):
-        self.tailleTrait = int(value)
-        textTailleTrait.config(text=f"Taille trait : {value}")
-        self.MainFractalesGestionObject.ChangerTailleTrait(self.tailleTrait)
+    def longueurTraitAffichage(self, value, textlongueurTrait):
+        self.longueurTrait = int(value)
+        textlongueurTrait.config(text=f"Longueur trait : {value}")
+        self.MainFractalesGestionObject.ChangerlongueurTrait(self.longueurTrait)
 
     def ClearMake(self, cadreVisuelBackground):
         reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
@@ -112,6 +113,18 @@ class SetupFractale(object):
         self.screen.update()
         self.couleurBackground = str(colors[1])
         
+    def OrientationAffichage(self, value, textOrientation):
+        self.Orientation = int(value)
+        textOrientation.config(text=f"Longueur trait : {value}")
+        self.turtle.setheading(self.Orientation)
+        self.screen.update()
+
+    def EpaisseurAffichage(self, value, textEpaisseur):
+        self.Epaisseur = int(value)
+        textEpaisseur.config(text=f"Epaisseur trait : {value}")
+        self.turtle.pensize(self.Epaisseur)
+
+
 
     # Méthode pour gérer le bouton pause/lancer
     def LancerPauseAppel(self, typeFractale = None):
@@ -170,15 +183,15 @@ bouttonChoixCouleur.pack(fill='x')
 cadreVisuelCouleur = Label(box2Couleur, bg = "#c3c3c3", text="#c3c3c3")
 cadreVisuelCouleur.pack(fill='x')
 
-# Box 3 : Taille trait
-box3TailleTrait = Frame(framePanelModif, bg = None)
-box3TailleTrait.pack(pady=5,padx=5,fill='x')
-valeurTailleTrait = IntVar()
-valeurTailleTrait.set(200)
-textTailleTrait = Label(box3TailleTrait, text=f"Taille trait : {valeurTailleTrait.get()}")
-textTailleTrait.pack(fill='x')
-scrollBarTailleTrait = Scale(box3TailleTrait, variable=valeurTailleTrait, orient='horizontal', from_=100, to=400, showvalue=0, command=lambda value:object1.TailleTraitAffichage(value = value, textTailleTrait=textTailleTrait))
-scrollBarTailleTrait.pack(fill='x')
+# Box 3 : Longueur trait
+box3longueurTrait = Frame(framePanelModif, bg = None)
+box3longueurTrait.pack(pady=5,padx=5,fill='x')
+valeurlongueurTrait = IntVar()
+valeurlongueurTrait.set(200)
+textlongueurTrait = Label(box3longueurTrait, text=f"Longueur trait : {valeurlongueurTrait.get()}")
+textlongueurTrait.pack(fill='x')
+scrollBarlongueurTrait = Scale(box3longueurTrait, variable=valeurlongueurTrait, orient='horizontal', from_=100, to=400, showvalue=0, command=lambda value:object1.longueurTraitAffichage(value = value, textlongueurTrait=textlongueurTrait))
+scrollBarlongueurTrait.pack(fill='x')
 
 # Box 4 : Clear Canva Matplotlib
 box4Clear = Frame(framePanelModif, bg = None)
@@ -195,6 +208,29 @@ butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️", co
 butttonChoixBackground.pack(fill='x')
 cadreVisuelBackground = Label(box5Background, bg = "#ffffff", text="#ffffff")
 cadreVisuelBackground.pack(fill='x')
+
+# box 6 : orientation mouse 
+box6Orientation = Frame(framePanelModif, bg = None)
+box6Orientation.pack(fill='x', pady=5, padx=5)
+valeurOrientation = IntVar()
+valeurOrientation.set(180)
+textOrientation = Label(box6Orientation, text=f"Orientation : {valeurOrientation.get()}")
+textOrientation.pack(fill='x')
+scrollBarOrientation = Scale(box6Orientation, variable=valeurOrientation, orient='horizontal', from_=0, to=360, showvalue=0, command=lambda value:object1.OrientationAffichage(value = value, textOrientation = textOrientation))
+scrollBarOrientation.pack(fill='x')
+
+
+#box 7 : épaisseur trait
+box7Epaisseur = Frame(framePanelModif, bg = None)
+box7Epaisseur.pack(fill='x', pady = 5, padx = 5)
+valeurEpaisseur = IntVar()
+valeurEpaisseur.set(1)
+textEpaisseur = Label(box7Epaisseur, text=f"Epaisseur : {valeurEpaisseur.get()}")
+textEpaisseur.pack(fill='x')
+scrollBarEpaisseur = Scale(box7Epaisseur, variable=valeurEpaisseur, orient='horizontal', from_=1, to=5, showvalue=0, command=lambda value:object1.EpaisseurAffichage(value = value, textEpaisseur = textEpaisseur))
+scrollBarEpaisseur.pack(fill='x')
+
+
 
 
 
@@ -248,7 +284,7 @@ choixFractaleMenu.pack(fill='x')
 buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
 
 # Initialisation de l'objet
-object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',tailleTrait=200,couleurBackground="#ffffff", turtle=turtle, screen= screen)
+object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',longueurTrait=200,couleurBackground="#ffffff", turtle=turtle, screen= screen)
 
 
 

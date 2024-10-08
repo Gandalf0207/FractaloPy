@@ -2,10 +2,10 @@ import time
 from turtle import pos, goto
 
 class MainFractaleGestion(object):
-    def __init__(self, profondeur, couleurTrait, tailleTrait, turtle, screen):
+    def __init__(self, profondeur, couleurTrait, longueurTrait, turtle, screen):
         self.profondeur = profondeur
         self.couleurTrait = couleurTrait
-        self.tailleTrait = tailleTrait
+        self.longueurTrait = longueurTrait
         self.isPaused = False
         self.turtle = turtle
         self.screen = screen
@@ -19,8 +19,8 @@ class MainFractaleGestion(object):
         self.couleurTrait = newCouleurTrait
         self.turtle.pencolor(self.couleurTrait)
 
-    def ChangerTailleTrait(self, newTailleTrait):
-        self.tailleTrait = newTailleTrait
+    def ChangerlongueurTrait(self, newlongueurTrait):
+        self.longueurTrait = newlongueurTrait
 
     def Lancer(self, fractaleType):
         self.isPaused = False
@@ -28,7 +28,7 @@ class MainFractaleGestion(object):
         # Sélectionne et dessine la fractale en fonction du type
         if fractaleType == "Sierpinski" and self.isFinished == True:
             self.isFinished = False
-            self.fractale_sierpinski = Fractale_Sierpinski(self.profondeur, self.tailleTrait, self) # NE PAS OUBLIER le self de fin pour lier les deux elements
+            self.fractale_sierpinski = Fractale_Sierpinski(self.profondeur, self.longueurTrait, self) # NE PAS OUBLIER le self de fin pour lier les deux elements
             self.fractale_sierpinski.dessiner()
             
         elif fractaleType == "Sierpinski" and self.isFinished == False:
