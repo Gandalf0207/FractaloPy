@@ -1,6 +1,6 @@
 # Importation des modules / librairies nécessaires
 from settings import *
-from Fractales import MainFractales
+from Fractales import ModuleFractales
 
 
 class SetupFractale(object):
