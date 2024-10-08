@@ -1,6 +1,6 @@
 # Importation des modules / librairies nécessaires
 from settings import *
-from Fractales import MainFractales
+from Fractales import ModuleFractales
 
 
 class SetupFractale(object):
@@ -17,7 +17,7 @@ class SetupFractale(object):
         # Nouveaux attributs
         self.isPaused = True # Indique si le processus est en pause
 
-        self.MainFractalesGestionObject = MainFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.longueurTrait,self.turtle, self.screen)
+        self.ModuleFractalesGestionObject = ModuleFractales.MainFractaleGestion(self.profondeur, self.couleurTrait, self.longueurTrait,self.turtle, self.screen)
 
     def QuestionTkinter(self, titreFenetre, textFenetre):
         return askquestion(titreFenetre, textFenetre)
@@ -62,7 +62,7 @@ class SetupFractale(object):
     def ProfondeurAffichage(self, value, textProfondeur):
         self.profondeur = int(value)
         textProfondeur.config(text=f"Profondeur : {value}")
-        self.MainFractalesGestionObject.ChangerProfondeur(self.profondeur)
+        self.ModuleFractalesGestionObject.ChangerProfondeur(self.profondeur)
 
 
     def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
@@ -73,7 +73,7 @@ class SetupFractale(object):
             cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
             bouttonChoixCouleur.configure(text="Couleur : Définie")   
             self.couleurTrait = str(colors[1])  
-            self.MainFractalesGestionObject.ChangerCouleur(self.couleurTrait)  
+            self.ModuleFractalesGestionObject.ChangerCouleur(self.couleurTrait)  
         else:
             cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
             bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
@@ -82,7 +82,7 @@ class SetupFractale(object):
     def longueurTraitAffichage(self, value, textlongueurTrait):
         self.longueurTrait = int(value)
         textlongueurTrait.config(text=f"Longueur trait : {value}")
-        self.MainFractalesGestionObject.ChangerlongueurTrait(self.longueurTrait)
+        self.ModuleFractalesGestionObject.ChangerlongueurTrait(self.longueurTrait)
 
     def ClearMake(self, cadreVisuelBackground):
         reponseUtilisateur = self.QuestionTkinter("Clear", "Vous êtes sur le point de supprimer la toile. Voulez vous la sauvegarder en image ?")
@@ -130,15 +130,16 @@ class SetupFractale(object):
         self.screen.update()
         cadreInfosPositions.config(text=f"({turtle_x},{turtle_y})")
 
+        canvasturtle.unbind("<Button-1>")
 
     # Méthode pour gérer le bouton pause/lancer
     def LancerPauseAppel(self, typeFractale = None):
         if not self.isPaused:
             self.isPaused = True
-            self.MainFractalesGestionObject.Pause()
+            self.ModuleFractalesGestionObject.Pause()
         else:
             self.isPaused = False
-            self.MainFractalesGestionObject.Lancer(typeFractale)
+            self.ModuleFractalesGestionObject.Lancer(typeFractale)
             self.screen.update()  # Assurer que l'écran est mis à jour après chaque appel
             toggle_pause(self.fractaleType)
 
@@ -204,8 +205,8 @@ box6ChoixFractale.pack(pady=5, padx=5, fill='x')
 textChoixFractale = Label(box6ChoixFractale, text="Choix de la fractale :")
 textChoixFractale.pack(fill='x')
 
-fractaleType = StringVar(value="Sierpinski")  # Valeur par défaut
-choixFractaleMenu = OptionMenu(box6ChoixFractale, fractaleType, "Sierpinski")  # Ajouter d'autres types ici
+fractaleType = StringVar(value=fractaleListe[0])  # Valeur par défaut
+choixFractaleMenu = OptionMenu(box6ChoixFractale, fractaleType, *fractaleListe)  # Ajouter d'autres types ici
 choixFractaleMenu.pack(fill='x')
 
 # Appel pour choisir et lancer la fractale
