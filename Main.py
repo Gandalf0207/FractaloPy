@@ -130,6 +130,7 @@ class SetupFractale(object):
         self.screen.update()
         cadreInfosPositions.config(text=f"({turtle_x},{turtle_y})")
 
+        canvasturtle.unbind("<Button-1>")
 
     # Méthode pour gérer le bouton pause/lancer
     def LancerPauseAppel(self, typeFractale = None):
@@ -204,8 +205,8 @@ box6ChoixFractale.pack(pady=5, padx=5, fill='x')
 textChoixFractale = Label(box6ChoixFractale, text="Choix de la fractale :")
 textChoixFractale.pack(fill='x')
 
-fractaleType = StringVar(value="Sierpinski")  # Valeur par défaut
-choixFractaleMenu = OptionMenu(box6ChoixFractale, fractaleType, "Sierpinski")  # Ajouter d'autres types ici
+fractaleType = StringVar(value=fractaleListe[0])  # Valeur par défaut
+choixFractaleMenu = OptionMenu(box6ChoixFractale, fractaleType, *fractaleListe)  # Ajouter d'autres types ici
 choixFractaleMenu.pack(fill='x')
 
 # Appel pour choisir et lancer la fractale
