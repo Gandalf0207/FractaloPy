@@ -1,17 +1,6 @@
 # Importation des modules / librairies nécessaires
-
+from settings import *
 from Fractales import MainFractales
-from tkinter import *
-from tkinter.colorchooser import askcolor
-from tkinter.messagebox import askquestion
-from turtle import *
-from numpy import *
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import time
-import turtle
-from PIL import ImageGrab
-from tkinter import filedialog
 
 
 class SetupFractale(object):
@@ -115,7 +104,7 @@ class SetupFractale(object):
         
     def OrientationAffichage(self, value, textOrientation):
         self.Orientation = int(value)
-        textOrientation.config(text=f"Longueur trait : {value}")
+        textOrientation.config(text=f"Orientation : {value}")
         self.turtle.setheading(self.Orientation)
         self.screen.update()
 
@@ -124,6 +113,22 @@ class SetupFractale(object):
         textEpaisseur.config(text=f"Epaisseur trait : {value}")
         self.turtle.pensize(self.Epaisseur)
 
+    def ActiveCurseurPosition(self):
+        canvasturtle.bind("<Button-1>", self.ClickButtonMoveTurtle)
+    
+    def ClickButtonMoveTurtle(self, event):
+        canvas_width = canvasturtle.winfo_width()
+        canvas_height = canvasturtle.winfo_height()
+
+        # Transformation des coordonnées pour que (0,0) soit au centre du canvas
+        turtle_x = event.x - canvas_width / 2
+        turtle_y = canvas_height / 2 - event.y
+
+        self.turtle.penup()
+        self.turtle.goto((turtle_x , turtle_y))
+        self.turtle.pendown()
+        self.screen.update()
+        cadreInfosPositions.config(text=f"({turtle_x},{turtle_y})")
 
 
     # Méthode pour gérer le bouton pause/lancer
@@ -136,16 +141,6 @@ class SetupFractale(object):
             self.MainFractalesGestionObject.Lancer(typeFractale)
             self.screen.update()  # Assurer que l'écran est mis à jour après chaque appel
             toggle_pause(self.fractaleType)
-
-
-
-
-
-
-
-
-
-
 
     
     
@@ -160,9 +155,69 @@ fenetre.geometry("900x600")
 fenetre.title("Fractales | © Cyanne Théo Loan Quentin")
 
 
+
 # Panel des modifications ---------------------------------------------------------------
 framePanelModif = Frame(fenetre, bg = bgFramePanelModif, width=widthFrameModifPanel)
 framePanelModif.pack(side=LEFT, expand=False, fill='y', padx=10, pady=10)
+
+
+
+
+# Box du canvas et btn img + pause -------------------------------------------------------
+frameBoxCanvas = Frame(fenetre, bg = None)
+frameBoxCanvas.pack(expand=True, fill=BOTH)
+
+canvasturtle = ScrolledCanvas(frameBoxCanvas)
+canvasturtle.pack(expand=True, fill=BOTH)
+
+# Set up the turtle screen using the canvas
+screen = TurtleScreen(canvasturtle)
+
+# Create a turtle instance attached to the screen
+turtle = RawTurtle(screen)
+screen.tracer(0)
+
+# Box boutton pause et generation d'image
+frameBoxButton = Frame(frameBoxCanvas, bg="blue")
+frameBoxButton.pack(side=BOTTOM, fill='x')
+
+# Bouton lancer/pause (gauche)
+buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause())
+buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
+
+# Fonction pour mettre à jour le bouton et l'état
+def toggle_pause(typeFractale = None):
+    if object1.isPaused:
+        buttonLancerPause.config(text="Pause")
+    else:
+        buttonLancerPause.config(text="Lancer")
+    object1.LancerPauseAppel(typeFractale)
+
+# Boutton Générer une image (droite)
+buttonMakePlotToImg = Button(frameBoxButton,text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
+buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
+
+
+# Ajout d'un menu pour le choix des fractales
+box6ChoixFractale = Frame(framePanelModif, bg=None)
+box6ChoixFractale.pack(pady=5, padx=5, fill='x')
+textChoixFractale = Label(box6ChoixFractale, text="Choix de la fractale :")
+textChoixFractale.pack(fill='x')
+
+fractaleType = StringVar(value="Sierpinski")  # Valeur par défaut
+choixFractaleMenu = OptionMenu(box6ChoixFractale, fractaleType, "Sierpinski")  # Ajouter d'autres types ici
+choixFractaleMenu.pack(fill='x')
+
+# Appel pour choisir et lancer la fractale
+buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
+
+
+
+
+
+
+
+
 
 
 # Box1 : Profondeur
@@ -225,63 +280,24 @@ box7Epaisseur = Frame(framePanelModif, bg = None)
 box7Epaisseur.pack(fill='x', pady = 5, padx = 5)
 valeurEpaisseur = IntVar()
 valeurEpaisseur.set(1)
-textEpaisseur = Label(box7Epaisseur, text=f"Epaisseur : {valeurEpaisseur.get()}")
+textEpaisseur = Label(box7Epaisseur, text=f"Epaisseur trait : {valeurEpaisseur.get()}")
 textEpaisseur.pack(fill='x')
 scrollBarEpaisseur = Scale(box7Epaisseur, variable=valeurEpaisseur, orient='horizontal', from_=1, to=5, showvalue=0, command=lambda value:object1.EpaisseurAffichage(value = value, textEpaisseur = textEpaisseur))
 scrollBarEpaisseur.pack(fill='x')
 
+# box 8 : position curseur
+box8CurseurPosition = Frame(framePanelModif, bg = None)
+box8CurseurPosition.pack(fill='x', pady = 5, padx=5)
+textButtonCurseurPosition = Button(box8CurseurPosition, text = "Position Curseur", command=lambda:object1.ActiveCurseurPosition())
+textButtonCurseurPosition.pack(fill='x')
+cadreInfosPositions = Label(box8CurseurPosition, bg = None, text=f"{turtle.pos()}")
+cadreInfosPositions.pack(fill='x')
 
 
 
 
 
-# Box du canvas et btn img + pause -------------------------------------------------------
-frameBoxCanvas = Frame(fenetre, bg = None)
-frameBoxCanvas.pack(expand=True, fill=BOTH)
 
-canvasturtle = ScrolledCanvas(frameBoxCanvas)
-canvasturtle.pack(expand=True, fill=BOTH)
-
-# Set up the turtle screen using the canvas
-screen = TurtleScreen(canvasturtle)
-
-# Create a turtle instance attached to the screen
-turtle = RawTurtle(screen)
-screen.tracer(0)
-
-# Box boutton pause et generation d'image
-frameBoxButton = Frame(frameBoxCanvas, bg="blue")
-frameBoxButton.pack(side=BOTTOM, fill='x')
-
-# Bouton lancer/pause (gauche)
-buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause())
-buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
-
-# Fonction pour mettre à jour le bouton et l'état
-def toggle_pause(typeFractale = None):
-    if object1.isPaused:
-        buttonLancerPause.config(text="Pause")
-    else:
-        buttonLancerPause.config(text="Lancer")
-    object1.LancerPauseAppel(typeFractale)
-
-# Boutton Générer une image (droite)
-buttonMakePlotToImg = Button(frameBoxButton,text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
-buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
-
-
-# Ajout d'un menu pour le choix des fractales
-box6ChoixFractale = Frame(framePanelModif, bg=None)
-box6ChoixFractale.pack(pady=5, padx=5, fill='x')
-textChoixFractale = Label(box6ChoixFractale, text="Choix de la fractale :")
-textChoixFractale.pack(fill='x')
-
-fractaleType = StringVar(value="Sierpinski")  # Valeur par défaut
-choixFractaleMenu = OptionMenu(box6ChoixFractale, fractaleType, "Sierpinski")  # Ajouter d'autres types ici
-choixFractaleMenu.pack(fill='x')
-
-# Appel pour choisir et lancer la fractale
-buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
 
 # Initialisation de l'objet
 object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',longueurTrait=200,couleurBackground="#ffffff", turtle=turtle, screen= screen)

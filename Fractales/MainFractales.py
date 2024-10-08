@@ -1,5 +1,4 @@
-import time
-from turtle import pos, goto
+from settings import *
 
 class MainFractaleGestion(object):
     def __init__(self, profondeur, couleurTrait, longueurTrait, turtle, screen):
