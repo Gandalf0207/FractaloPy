@@ -1,4 +1,6 @@
-*venv/
-*test/
-*png
-*ps
+**venv/
+**test/
+**png
+**ps
+
+**__pycache__/
