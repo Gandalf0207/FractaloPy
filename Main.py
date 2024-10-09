@@ -12,7 +12,6 @@ class SetupFractale(object):
         self.couleurBackground = couleurBackground
         self.turtle = turtle
         self.screen = screen
-        self.fractaleType = None
 
         # Nouveaux attributs
         self.isPaused = True # Indique si le processus est en pause
@@ -141,7 +140,6 @@ class SetupFractale(object):
             self.isPaused = False
             self.ModuleFractalesGestionObject.Lancer(typeFractale)
             self.screen.update()  # Assurer que l'écran est mis à jour après chaque appel
-            toggle_pause(self.fractaleType)
 
     
     

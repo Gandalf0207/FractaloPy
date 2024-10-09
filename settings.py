@@ -10,6 +10,7 @@ from PIL import ImageGrab
 # Module Time
 import time
 
+import threading
+import time
 
-
-fractaleListe = ("Sierpinski", "Koch")
+fractaleListe = ("Sierpinski", "Koch", "Vicsek", "Fibonacci")
