@@ -139,7 +139,8 @@ class SetupFractale(object):
         else:
             self.isPaused = False
             self.ModuleFractalesGestionObject.Lancer(typeFractale)
-            self.screen.update()  # Assurer que l'écran est mis à jour après chaque appel
+            self.screen.update() # Assurer que l'écran est mis à jour après chaque appel
+            toggle_pause() 
 
     
     

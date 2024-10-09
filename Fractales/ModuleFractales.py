@@ -233,11 +233,6 @@ class FractaleVicsek:
             self.reprendre_dessin()
 
 
-
-#---------------script à ajouter --------------------
-
-
-
 class FractaleFibonacci:
     def __init__(self, nombre, longueur, gestionnaire):
         """Initialisation de la fractale du mot de Fibonacci"""
