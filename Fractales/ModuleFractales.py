@@ -276,7 +276,7 @@ class FractaleFibonacci:
                 if self.gestionnaire.couleurTrait == "Random":
                     self.gestionnaire.CouleurRandom()
                 self.gestionnaire.screen.update()
-                
+
                 if not self.gestionnaire.isPaused:
                     if self.mot[i] == "B":
                         self.gestionnaire.turtle.pendown()
@@ -309,3 +309,52 @@ class FractaleFibonacci:
         """Méthode pour démarrer ou reprendre le dessin"""
         if not self.gestionnaire.isPaused:
             self.reprendre_dessin()
+
+
+# script à rajouter : --------------------------------------
+
+# from turtle import *
+
+# from random import randint
+# from math import sqrt
+
+
+# class FractalesPythagore:
+#     def __init__(self, cote, profondeur):
+#         self.cote = cote
+#         self.profondeur = profondeur
+#     def carre(self,cote) :
+#         pencolor('blue')
+#         fillcolor('pink')
+#         begin_fill()
+#         for i in range(4) :
+#             forward(cote)
+#             right(90)
+#         end_fill()
+
+#     def dessiner_pythagore(self,cote, profondeur) :
+#         if profondeur == 1:
+#             return self.carre(cote)
+#         if profondeur > 1 :
+#             self.carre(cote)
+#             forward(cote)
+#             racine_cote = cote/sqrt(2)
+#             left(45)
+#             self.dessiner_pythagore(racine_cote, profondeur-1)
+#             right(90)
+#             penup()
+#             forward(racine_cote)
+#             pendown()
+#             self.dessiner_pythagore(racine_cote, profondeur-1)
+#             penup()
+#             backward(racine_cote)
+#             pendown()
+#             left(45)
+#             backward(cote)
+#     def dessiner(self):
+#         """MÃ©thode pour dessiner la fractale"""
+#         self.dessiner_pythagore(self.cote, self.profondeur)
+
+
+# c = FractalesPythagore(100, 4)
+# c.dessiner()
