@@ -5,7 +5,7 @@
 > Pour toutes informations concernant les droits d'utilisation, veilllez vous référer à la [Liscence](https://github.com/Gandalf0207/FractaloPy/Liscence.txt)
 
 
-### Présentation du Projet :
+## Présentation du Projet :
 Ce projet a été réalisé dans le cadre de l'enseignement NSI (Numérique et Sciences Informatiques) en Terminale. Il s'agit d'une interface graphique (GUI) en Python utilisant le module Turtle pour générer différentses fractales. L'utilisateur peut interagir avec l'interface pour modifier les paramètres de génération des fractales, comme le nombre de niveaux de récursivité, la taille des éléments et bien d'autres !
 
 > Le projet met en avant plusieurs concepts clés :
@@ -42,6 +42,67 @@ Pour ce faire, nous vous mettons à disposition la possibiliser de modifier :
 De plus, vous avez la possibilité d'enregister, si vous le souhaitez une ou plusieurs image(s) de votre travail !
 
 <br></br>
+<br></br>
+
+## Intégration developpeurs :
+
+Vous souhaitez modifier le projet ? Vous souhaiter inéger de nouvelles fractales / récupérer les différentes ```class object```, ou bien simplement comprendre le code source de $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$. Alors ces différentes interfaces sont pour vous !
+
+
+#### Setup
+
+| Fonctions                                                                                                                           | Description                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+|         |         |
+|         |         |
+|         |         |
+|         |         |
+|         |         |
+|         |         |
+
+.... Autres class.... 
+
+
+#### Model pour ajouter des fractales : 
+
+> Ajout de chaque fractale en suivant la compo nécéssaire pour chaque fonctionnalités
+
+```Python3
+class <nomFractale>:
+    def __init__(self, nombre, longueur, gestionnaire):
+        self.nombre = nombre
+        self.longueur = longueur
+        self.gestionnaire = gestionnaire
+        self.state = []  # Pile pour sauvegarder l'état de la récursion
+
+    def dessiner_<nomFractale>(self, n, l):
+        if self.gestionnaire.isPaused:
+            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
+            return
+
+        self.gestionnaire.turtle.speed(10)
+        self.gestionnaire.screen.update()
+
+        if self.gestionnaire.couleurTrait == "Random":
+            self.gestionnaire.CouleurRandom()
+
+        # < Corps fractales récursives >
+           
+    def reprendre_dessin(self):
+        if self.state:
+            n, l, pos, heading = self.state.pop()
+            self.gestionnaire.turtle.penup()
+            self.gestionnaire.turtle.setposition(pos)
+            self.gestionnaire.turtle.setheading(heading)
+            self.gestionnaire.turtle.pendown()
+            self.dessiner_sierpinski(n, l)
+        else:
+            self.dessiner_<nomFractale>(self.nombre, self.longueur)
+
+    def dessiner(self):
+        if not self.gestionnaire.isPaused:
+            self.reprendre_dessin()
+```
 
 
 
