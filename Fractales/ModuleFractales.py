@@ -59,11 +59,9 @@ class FractaleSierpinski:
 
     def dessiner_sierpinski(self, n, l):
 
-        print("bonjour")
         # Sauvegarde de l'état actuel si on met en pause
         if self.gestionnaire.isPaused:
             self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
-            print('aaaaaaaa')
             return  # Arrêt temporaire
         
         # Paramétrage de la tortue
