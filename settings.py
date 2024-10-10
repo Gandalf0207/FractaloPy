@@ -9,6 +9,8 @@ from turtle import *
 from PIL import ImageGrab
 # Module Time
 import time
+# Module Random
+from random import randint
 
 
 fractaleListe = ("Sierpinski", "Koch", "Vicsek", "Fibonacci")

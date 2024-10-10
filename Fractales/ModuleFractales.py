@@ -17,7 +17,11 @@ class MainFractaleGestion(object):
 
     def ChangerCouleur(self, newCouleurTrait):
         self.couleurTrait = newCouleurTrait
-        self.turtle.pencolor(self.couleurTrait)
+        if newCouleurTrait != "Random":
+            self.turtle.pencolor(self.couleurTrait)
+
+    def CouleurRandom(self):
+        self.turtle.pencolor('#{:06x}'.format(randint(0, 0xFFFFFF)))
 
     def ChangerlongueurTrait(self, newlongueurTrait):
         self.longueurTrait = newlongueurTrait
@@ -67,6 +71,9 @@ class FractaleSierpinski:
         # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
+
+        if self.gestionnaire.couleurTrait == "Random":
+            self.gestionnaire.CouleurRandom()
 
         if n == 0:
             for i in range(3):
@@ -123,6 +130,9 @@ class FractaleKoch:
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
         
+        if self.gestionnaire.couleurTrait == "Random":
+            self.gestionnaire.CouleurRandom()
+
         if n == 0:
             self.gestionnaire.turtle.forward(l)
         else:
@@ -177,6 +187,9 @@ class FractaleVicsek:
         # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
+
+        if self.gestionnaire.couleurTrait == "Random":
+            self.gestionnaire.CouleurRandom()
 
         # Sauvegarder la position actuelle
         x = self.gestionnaire.turtle.xcor()
@@ -259,7 +272,11 @@ class FractaleFibonacci:
             self.mot = list(self.mot)
             
             for i in range(len(self.mot)):
+
+                if self.gestionnaire.couleurTrait == "Random":
+                    self.gestionnaire.CouleurRandom()
                 self.gestionnaire.screen.update()
+                
                 if not self.gestionnaire.isPaused:
                     if self.mot[i] == "B":
                         self.gestionnaire.turtle.pendown()

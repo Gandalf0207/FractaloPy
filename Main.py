@@ -72,11 +72,13 @@ class SetupFractale(object):
             cadreVisuelCouleur.configure(bg = colors[1], text=str(colors[1]), fg=luminosity)
             bouttonChoixCouleur.configure(text="Couleur : Définie")   
             self.couleurTrait = str(colors[1])  
-            self.ModuleFractalesGestionObject.ChangerCouleur(self.couleurTrait)  
         else:
             cadreVisuelCouleur.configure(bg = "#000000", text="#Random", fg="#ffffff")
             bouttonChoixCouleur.configure(text="Couleurs : Aléatoires")
             self.couleurTrait = "Random"
+            
+        self.ModuleFractalesGestionObject.ChangerCouleur(self.couleurTrait)
+
 
     def longueurTraitAffichage(self, value, textlongueurTrait):
         self.longueurTrait = int(value)
