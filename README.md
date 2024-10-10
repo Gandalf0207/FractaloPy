@@ -44,7 +44,7 @@ De plus, vous avez la possibilité d'enregister, si vous le souhaitez une ou plu
 <br></br>
 <br></br>
 
-## Intégration developpeurs :
+## Intégration développeurs :
 
 Vous souhaitez modifier le projet ? Vous souhaiter inéger de nouvelles fractales / récupérer les différentes ```class object```, ou bien simplement comprendre le code source de $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$. Alors ces différentes interfaces sont pour vous !
 
@@ -73,7 +73,7 @@ class <nomFractale>:
         self.nombre = nombre
         self.longueur = longueur
         self.gestionnaire = gestionnaire
-        self.state = []  # Pile pour sauvegarder l'état de la récursion
+        self.state = []
 
     def dessiner_<nomFractale>(self, n, l):
         if self.gestionnaire.isPaused:
@@ -104,5 +104,35 @@ class <nomFractale>:
             self.reprendre_dessin()
 ```
 
+<br></br>
+<br></br>
+
+## Installation : 
+
+Pour récupérer le projet : 
+
+> Dans un terminal, rentrer la commande :
+```cmd
+git clone https://github.com/Gandalf0207/FractaloPy.git
+```
+
+> Dans le dossier du projet, dans un terminal, rentrer la commande :
+```cmd
+python -m pip install Requirements.txt
+```
+
+Après cela, exécuter le fichier `Main.py`
+
+<br>
+
+> [!TIP]
+> Assurez-vous d'avoir les droits nécessaires et que Python soit correctement installé au préalable sur votre machine.
+
+<br></br>
+<br></br>
 
 
+#
+$\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$ __© Tous droits réservés 2024__
+
+*Made by Vuadelle Cyanne, Berruezo Loan, Luban Théo, Pladeau Quentin with* :heart:
