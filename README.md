@@ -2,7 +2,7 @@
 # $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$
 
 > [!IMPORTANT]
-> Pour toutes informations concernant les droits d'utilisation, veilllez vous référer à la [Liscence](https://github.com/Gandalf0207/FractaloPy/Liscence.txt)
+> Pour toutes informations concernant les droits d'utilisation, veillez vous référer à la [Licence](https://github.com/Gandalf0207/FractaloPy/Licence.txt)
 
 
 ## Présentation du Projet :
