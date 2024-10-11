@@ -65,7 +65,10 @@ Vous souhaitez modifier le projet ? Vous souhaiter inéger de nouvelles fractale
 
 #### Model pour ajouter des fractales : 
 
-> Ajout de chaque fractale en suivant la compo nécéssaire pour chaque fonctionnalités
+> Pour ajouter une nouvelle fractale, veuillez respecter la mise en page suivante. Dans le fichier `ModuleFractales.py`, ajouter une nouvelle class comme l'exemple ci-dessous.
+
+> [!WARNING]
+> Chaque élément turtle pour le corps de votre fractale récursive, doit obligatoirement être précédé de `self.gestionnaire.turtle`
 
 ```Python3
 class <nomFractale>:
@@ -74,6 +77,11 @@ class <nomFractale>:
         self.longueur = longueur
         self.gestionnaire = gestionnaire
         self.state = []
+
+    def <méthodeSecondaireFractale>(self, **args):
+        """ Cette méthode n'est pas obligatoire, elle doit être présente uniquement
+            si votre corps de fractale récursive nécéssite l'utilisation d'une fonction
+            supplémentaire (ex : déssiner à carré tout les x temps). """
 
     def dessiner_<nomFractale>(self, n, l):
         if self.gestionnaire.isPaused:
@@ -86,7 +94,7 @@ class <nomFractale>:
         if self.gestionnaire.couleurTrait == "Random":
             self.gestionnaire.CouleurRandom()
 
-        # < Corps fractales récursives >
+        # < Corps fractale récursive >
            
     def reprendre_dessin(self):
         if self.state:
@@ -103,6 +111,35 @@ class <nomFractale>:
         if not self.gestionnaire.isPaused:
             self.reprendre_dessin()
 ```
+
+> Après avoir ajouté votre `classFractale`, vous devez configurer l'option d'appel de votre nouvelle class. Pour ce faire, dans le fichier `ModuleFractales.py`, dans la class `MainFractaleGestion`, dans la méthode `Lancer` respecter la disposition suivante et ajouter votre nouvelle `classFractale`
+
+> [!NOTE]
+> Le `nomFractaleSimple`, sera le nom qui sera affiché dans le menu déroulant de l'interface utilisateur. Ce sera également le même texte pour l'étape suivante.
+
+```Python3
+class MainFractaleGestion(object):
+    def __init__(self,**args):
+        pass
+
+    def Lancer(self, fractaleType):
+        match fractaleType:
+            case "Sierpinski": 
+                self.fractale = FractaleSierpinski(self.profondeur, self.longueurTrait, self)
+            case "Koch":
+                self.fractale = FractaleKoch(self.profondeur, self.longueurTrait, self)
+            case "<nomFractaleSimple>":
+                self.fractale = <nomFractale>(self.profondeur, self.longueurTrait, self)
+            ...
+        self.fractale.dessiner()
+```
+
+> Enfin, il faut ajouter le `nomFractaleSimple`, de l'étape précédente dans la variable `fractaleListe` du fichier `settings.py`.
+
+```Python3
+fractaleListe = ("Sierpinski", "Koch","<nomFractaleSimple>")
+```
+
 
 <br></br>
 <br></br>
