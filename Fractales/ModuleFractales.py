@@ -42,7 +42,8 @@ class MainFractaleGestion(object):
                     self.fractale = FractaleVicsek(self.profondeur, self.longueurTrait, self)
                 case "Fibonacci":
                     self.fractale = FractaleFibonacci(self.profondeur, self.longueurTrait, self)
-            
+                case "Pythagore":
+                    self.fractale = FractalesPythagore(self.profondeur, self.longueurTrait, self)
             self.fractale.dessiner()
             
         elif self.isFinished == False:
@@ -311,50 +312,66 @@ class FractaleFibonacci:
             self.reprendre_dessin()
 
 
-# script à rajouter : --------------------------------------
+class FractalesPythagore:
+    def __init__(self, nombre, longueur, gestionnaire):
+        self.nombre = nombre 
+        self.longueur = longueur // 5
+        self.gestionnaire = gestionnaire
+        self.state = []  # Pile pour sauvegarder l'état de la récursion
 
-# from turtle import *
-
-# from random import randint
-# from math import sqrt
-
-
-# class FractalesPythagore:
-#     def __init__(self, cote, profondeur):
-#         self.cote = cote
-#         self.profondeur = profondeur
-#     def carre(self,cote) :
-#         pencolor('blue')
-#         fillcolor('pink')
-#         begin_fill()
-#         for i in range(4) :
-#             forward(cote)
-#             right(90)
-#         end_fill()
-
-#     def dessiner_pythagore(self,cote, profondeur) :
-#         if profondeur == 1:
-#             return self.carre(cote)
-#         if profondeur > 1 :
-#             self.carre(cote)
-#             forward(cote)
-#             racine_cote = cote/sqrt(2)
-#             left(45)
-#             self.dessiner_pythagore(racine_cote, profondeur-1)
-#             right(90)
-#             penup()
-#             forward(racine_cote)
-#             pendown()
-#             self.dessiner_pythagore(racine_cote, profondeur-1)
-#             penup()
-#             backward(racine_cote)
-#             pendown()
-#             left(45)
-#             backward(cote)
-#     def dessiner(self):
-#         """MÃ©thode pour dessiner la fractale"""
-#         self.dessiner_pythagore(self.cote, self.profondeur)
+    def carre(self,l) :
+        for i in range(4) :
+            self.gestionnaire.turtle.forward(l)
+            self.gestionnaire.turtle.right(90)
 
 
-# c = FractalesPythagore(100, 4)
-# c.dessiner()
+    def dessiner_pythagore(self,n,l) :
+
+        # Sauvegarde de l'état actuel si on met en pause
+        if self.gestionnaire.isPaused:
+            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
+            return  # Arrêt temporaire
+        
+        # Paramétrage de la tortue
+        self.gestionnaire.turtle.speed(10)
+        self.gestionnaire.screen.update()
+
+        if self.gestionnaire.couleurTrait == "Random":
+            self.gestionnaire.CouleurRandom()
+
+
+        if n == 1:
+            return self.carre(l)
+        if n > 1 :
+            self.carre(l)
+            self.gestionnaire.turtle.forward(l)
+            racine_cote = l/sqrt(2)
+            self.gestionnaire.turtle.left(45)
+            self.dessiner_pythagore(n-1, racine_cote)
+            self.gestionnaire.turtle.right(90)
+            self.gestionnaire.turtle.penup()
+            self.gestionnaire.turtle.forward(racine_cote)
+            self.gestionnaire.turtle.pendown()
+            self.dessiner_pythagore(n-1, racine_cote)
+            self.gestionnaire.turtle.penup()
+            self.gestionnaire.turtle.backward(racine_cote)
+            self.gestionnaire.turtle.pendown()
+            self.gestionnaire.turtle.left(45)
+            self.gestionnaire.turtle.backward(l)
+
+    def reprendre_dessin(self):
+        """Reprend le dessin depuis l'état sauvegardé"""
+        if self.state:
+            # Récupération de l'état sauvegardé
+            n, l, pos, heading = self.state.pop()
+            self.gestionnaire.turtle.penup()
+            self.gestionnaire.turtle.setposition(pos)
+            self.gestionnaire.turtle.setheading(heading)
+            self.gestionnaire.turtle.pendown()
+            self.dessiner_pythagore(n, l)
+        else:
+            self.dessiner_pythagore(self.nombre, self.longueur)
+
+    def dessiner(self):
+        if not self.gestionnaire.isPaused:
+            self.reprendre_dessin()

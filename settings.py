@@ -11,6 +11,7 @@ from PIL import ImageGrab
 import time
 # Module Random
 from random import randint
+# Module Maths 
+from math import sqrt
 
-
-fractaleListe = ("Sierpinski", "Koch", "Vicsek", "Fibonacci")
+fractaleListe = ("Sierpinski", "Koch", "Vicsek", "Fibonacci", "Pythagore")
