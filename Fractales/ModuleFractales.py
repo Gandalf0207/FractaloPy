@@ -279,10 +279,10 @@ class FractaleFibonacci:
                 self.gestionnaire.screen.update()
 
                 if not self.gestionnaire.isPaused:
-                    if self.mot[i] == "B":
+                    if self.mot[i] == "A":
                         self.gestionnaire.turtle.pendown()
                         self.gestionnaire.turtle.forward(l)
-                    elif self.mot[i] == "A":
+                    elif self.mot[i] == "B":
                         self.gestionnaire.turtle.pendown()
                         if (i + 1) % 2 == 0:
                             self.gestionnaire.turtle.right(90)
