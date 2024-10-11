@@ -345,7 +345,7 @@ class FractalesPythagore:
         if n > 1 :
             self.carre(l)
             self.gestionnaire.turtle.forward(l)
-            racine_cote = l/sqrt(2)
+            racine_cote = l/(2**(1/2))
             self.gestionnaire.turtle.left(45)
             self.dessiner_pythagore(n-1, racine_cote)
             self.gestionnaire.turtle.right(90)
