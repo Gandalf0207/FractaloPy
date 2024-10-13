@@ -295,7 +295,10 @@ def toggle_pause(typeFractale = None):
         buttonLancerPause.config(text="Lancer") # On met à jour le texte
     object1.LancerPauseAppel(typeFractale) # On appel la méthode pour lancer le tout
  
-    
+
+
+def LienOuvrir(lien):
+    webbrowser.open_new(lien)
 
 # --------------------------------------------------------------- #
 # -------------------------- TOOL BOX --------------------------- #
@@ -328,18 +331,29 @@ screen = TurtleScreen(canvasturtle)
 turtle = RawTurtle(screen)
 screen.tracer(0)
 
-# Box boutton pause et generation d'image
+# Box bouton pause et génération d'image
 frameBoxButton = Frame(frameBoxCanvas, bg="blue")
 frameBoxButton.pack(side=BOTTOM, fill='x')
+
 # Bouton lancer/pause (gauche)
 buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause())
-buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
-# Appel pour choisir et lancer la fractale
-buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
-# Boutton Générer une image (droite)
-buttonMakePlotToImg = Button(frameBoxButton,text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
-buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
+# Utilisation de grid pour positionner
+buttonLancerPause.grid(row=0, column=0, padx=10, pady=10)
 
+# Label Titre du projet + lien GitHub, centré et bien visible
+buttonTitreLienProjet = Label(frameBoxButton, text="FractaloPy", fg="black", cursor="hand2", bg="blue", font=("Arial", 20, "bold"))
+buttonTitreLienProjet.grid(row=0, column=1, padx=10)  # Centré dans la colonne du milieu
+buttonTitreLienProjet.bind("<Button-1>", lambda e: LienOuvrir("https://github.com/Gandalf0207/FractaloPy"))
+
+# Bouton Générer une image (droite)
+buttonMakePlotToImg = Button(frameBoxButton, text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
+# Utilisation de grid pour positionner
+buttonMakePlotToImg.grid(row=0, column=2, padx=10, pady=10)
+
+# Optionnel: pour centrer tout dans la même ligne, ajuster les poids des colonnes
+frameBoxButton.grid_columnconfigure(0, weight=1)  # Lancer bouton
+frameBoxButton.grid_columnconfigure(1, weight=1)  # Titre projet
+frameBoxButton.grid_columnconfigure(2, weight=1)  # Enregistrer bouton
 
 
 
