@@ -46,7 +46,7 @@ De plus, vous avez la possibilité d'enregister, si vous le souhaitez une ou plu
 
 ## Intégration développeurs :
 
-Vous souhaitez modifier le projet ? Vous souhaiter inéger de nouvelles fractales / récupérer les différentes ```class object```, ou bien simplement comprendre le code source de $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$. Alors ces différentes interfaces sont pour vous !
+Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractales / récupérer les différentes ```class object```, ou bien simplement comprendre le code source de $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$. Alors ces différentes interfaces sont pour vous !
 
 
 #### Setup
@@ -72,44 +72,64 @@ Vous souhaitez modifier le projet ? Vous souhaiter inéger de nouvelles fractale
 
 ```Python3
 class <nomFractale>:
+    """ class permettant de dessiner et de gérer globalement la fractale en cours de dessin / en pause"""
+
     def __init__(self, nombre, longueur, gestionnaire):
+        """Méthode d'initialisation de la class, grâce à l'intanciation de la class. 
+    
+        Input : nombre (int), 
+                longueur (int), 
+                gestionnaire (class parent), 
+        Output : None """
+    
         self.nombre = nombre
         self.longueur = longueur
         self.gestionnaire = gestionnaire
-        self.state = []
-
-    def <méthodeSecondaireFractale>(self, **args):
-        """ Cette méthode n'est pas obligatoire, elle doit être présente uniquement
-            si votre corps de fractale récursive nécéssite l'utilisation d'une fonction
-            supplémentaire (ex : déssiner à carré tout les x temps). """
-
-    def dessiner_<nomFractale>(self, n, l):
-        if self.gestionnaire.isPaused:
-            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
-            return
-
+        self.state = []  # Pile pour sauvegarder l'état de la récursion
+    
+    def __Dessiner< nom >__(self, n, l):
+        """ Méthode privé permettant le dessin de la fractale appelé, 
+        ainsi que la sauvegarde de son état d'avancement si pause il y a. 
+        
+        Input : n (int),
+                l (int)
+        Ouput : None """
+    
+        # Sauvegarde de l'état actuel si on met en pause
+        if self.gestionnaire.isPaused: # Si boolean True
+            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading())) # On prend les infos et on les stock
+            return  # Arrêt temporaire
+        
+        # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
-
-        if self.gestionnaire.couleurTrait == "Random":
-            self.gestionnaire.CouleurRandom()
-
-        # < Corps fractale récursive >
+    
+        if self.gestionnaire.couleurTrait == "Random": # Si la couleur est aléatoire
+            self.gestionnaire.__CouleurRandom__() # On fait appel à la méthode compétente pour changer la couleur
+    
+        # Partie modulable, pour dessiner en récursif la fractale
+        < script récursif de votre fractale >
+    
            
-    def reprendre_dessin(self):
-        if self.state:
+    def __ReprendreDessin__(self):
+        """Méthode qui reprend le dessin depuis l'état sauvegardé"""
+    
+        if self.state: # Si boolean True
+            # Récupération de l'état sauvegardé
             n, l, pos, heading = self.state.pop()
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.dessiner_sierpinski(n, l)
-        else:
-            self.dessiner_<nomFractale>(self.nombre, self.longueur)
-
+            self.__Dessiner< nom >__(n, l) # On transmet les valeurs sauvegardés
+        else: #Si booelan False
+            self.__Dessiner< nom >__(self.nombre, self.longueur) # On lance le dessins simplement
+    
     def dessiner(self):
-        if not self.gestionnaire.isPaused:
-            self.reprendre_dessin()
+        """Méthode qui permet de reprendre ou non le dessin"""
+    
+        if not self.gestionnaire.isPaused: # Check simple avant de dessiner si on peut
+            self.__ReprendreDessin__()
 ```
 
 > Après avoir ajouté votre `classFractale`, vous devez configurer l'option d'appel de votre nouvelle class. Pour ce faire, dans le fichier `ModuleFractales.py`, dans la class `MainFractaleGestion`, dans la méthode `Lancer` respecter la disposition suivante et ajouter votre nouvelle `classFractale`
@@ -119,6 +139,8 @@ class <nomFractale>:
 
 ```Python3
 class MainFractaleGestion(object):
+    """ class de MainGestion Fractale qui permet lors de l'appel de la méthode lancer,
+    d'éxécuter et de lancer les script adéquats aux demandes de l'utilisateurs  """
     def __init__(self,**args):
         pass
 
