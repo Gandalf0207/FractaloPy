@@ -1,39 +1,97 @@
+# -------------------------------------------------------------------------------------- #
+# ----------------------- FractaloPy © Tous droits réservés 2024 ----------------------- #
+# -------------------------------------------------------------------------------------- #
+
+# https://github.com/Gandalf0207/FractaloPy
+
+
+# Importation du fichier settings
 from settings import *
-#Gestion ---
+
+
 class MainFractaleGestion(object):
-    def __init__(self, profondeur, couleurTrait, longueurTrait, turtle, screen):
-        self.profondeur = profondeur
-        self.couleurTrait = couleurTrait
-        self.longueurTrait = longueurTrait
-        self.isPaused = False
-        self.turtle = turtle
-        self.screen = screen
-        self.isFinished = True
-        self.fractale = None
-        self.fractaleType = None
+    """ class de MainGestion Fractale qui permet lors de l'appel de la méthode lancer,
+    d'éxécuter et de lancer les script adéquats aux demandes de l'utilisateurs  """
 
-    def ChangerProfondeur(self, profondeur):
-        self.profondeur = profondeur
+    def __init__(self, profondeur, couleurTrait, longueurTrait, turtle, screen) -> None:
+        """ Méthode permettant d'initialiser les valeurs de la class MainFractaleGestion 
+        
+        Input : profondeur (int),
+                couleurTrait (str),
+                longueurTrait (int),
+                turtle (turtle element),
+                screen (turtle element)
+        Output : None"""
 
-    def ChangerCouleur(self, newCouleurTrait):
-        self.couleurTrait = newCouleurTrait
-        if newCouleurTrait != "Random":
-            self.turtle.pencolor(self.couleurTrait)
+        self.profondeur = profondeur # nombre de récursivité
+        self.couleurTrait = couleurTrait # couleur du trait
+        self.longueurTrait = longueurTrait # longueur du trait
+        self.isPaused = False # boolean 
+        self.turtle = turtle # element turtle
+        self.screen = screen # element turtle 
+        self.isFinished = True # check element boolean pour reprendre
+        self.fractale = None # type de fractale 
+        self.fractaleType = None # check pour relancer ou non une nouvelle fractale
 
-    def CouleurRandom(self):
+
+
+    def __CouleurRandom__(self):
+        """ Méthode privé permettant de changer la couleur du trait aléatoirement
+        
+        Input : None
+        Output : None """
+
+        # Set de la nouvelle couleur aléatoire sur le stylo de la tortue
         self.turtle.pencolor('#{:06x}'.format(randint(0, 0xFFFFFF)))
 
+
+
+    def ChangerProfondeur(self, profondeur):
+        """ Méthode pour mettre à jour la profondeur de génération
+
+        Input : profondeur (int)
+        Output : None """
+
+        self.profondeur = profondeur # Mise à jour au sein de la class
+
+
+
+    def ChangerCouleur(self, newCouleurTrait):
+        """ Méthode permettant de metrre à jour la couleur du trait de dessin
+         
+        Intput : newCouleurTrait (str)
+        Output : None """
+
+        self.couleurTrait = newCouleurTrait # Mise à jour au sein de la class
+        if newCouleurTrait != "Random": # Si c'est pas en random, alors on met directement la couleur sur le stylo
+            self.turtle.pencolor(self.couleurTrait) # Mise à jour au sein de la class
+
+
+
     def ChangerlongueurTrait(self, newlongueurTrait):
-        self.longueurTrait = newlongueurTrait
+        """ Méthode pour changer la longueur du trait de dessin 
+        
+        Input : newlongueurTrait (int)
+        Output : None """
+
+        self.longueurTrait = newlongueurTrait # Mise à jour au sein de la class
+
+
 
     def Lancer(self, fractaleType):
-        self.isPaused = False
+        """ Méthode pour lancer la génération de la bonne fractale et de reprendre si pas terminé
+          
+        Input : fractaleType (str)
+        Output : None  """
+
+
+        self.isPaused = False # On enlève la pause
 
         # Sélectionne et dessine la fractale en fonction du type
-        if self.isFinished == True or fractaleType != self.fractaleType:
-            self.fractaleType = fractaleType
-            self.isFinished = False
-            match fractaleType:
+        if self.isFinished == True or fractaleType != self.fractaleType: # Si erminé et nouvelle fractale
+            self.fractaleType = fractaleType #  On actualise la nouvelle fractale
+            self.isFinished = False # On indique de ce n'est pas terminé
+            match fractaleType: # on check et on initialise le bon object de fractale
                 case "Sierpinski": 
                     self.fractale = FractaleSierpinski(self.profondeur, self.longueurTrait, self) # NE PAS OUBLIER le self de fin pour lier les deux elements
                 case "Koch":
@@ -44,38 +102,67 @@ class MainFractaleGestion(object):
                     self.fractale = FractaleFibonacci(self.profondeur, self.longueurTrait, self)
                 case "Pythagore":
                     self.fractale = FractalesPythagore(self.profondeur, self.longueurTrait, self)
-            self.fractale.dessiner()
+            self.fractale.dessiner() # On appel la méthode pour dessiner le tout
             
-        elif self.isFinished == False:
-            self.fractale.dessiner()
-            self.isFinished = True
+        elif self.isFinished == False: # Si ce n'est pas terminé
+            self.fractale.dessiner() # On termone de dessiner
+            self.isFinished = True # On indique que le dessin est terminé
+
+
 
     def Pause(self):
-        self.isPaused = True
+        """ Méthode de mise en pause
+        
+        Input : None
+        Output : None  """
 
 
-# Ajout de chaque fractale en suivant la compo nécéssaire pour chaque fonctionnalités
+        self.isPaused = True # Mise en pause (True du boolean)
+
+
+# ------------------------------------------------------------------------------------#
+# ------------------------------ class Fractales -------------------------------------#
+# ------------------------------------------------------------------------------------#
+
+# NOTE : Seule la class de la Fractale de Sierpinski sera commentée, car chaque class reprend la meme structure et fonctionne pareillement. 
+
 class FractaleSierpinski:
+    """ class permettant de dessiner et de gérer globalement la fractale en cours de dessin / en pause"""
+
     def __init__(self, nombre, longueur, gestionnaire):
+        """Méthode d'initialisation de la class, grâce à l'intanciation de la class. 
+
+        Input : nombre (int), 
+                longueur (int), 
+                gestionnaire (class parent), 
+        Output : None """
+
         self.nombre = nombre
         self.longueur = longueur
         self.gestionnaire = gestionnaire
         self.state = []  # Pile pour sauvegarder l'état de la récursion
 
     def __DessinerSierpinski__(self, n, l):
+        """ Méthode privé permettant le dessin de la fractale appelé, 
+        ainsi que la sauvegarde de son état d'avancement si pause il y a. 
+        
+        Input : n (int),
+                l (int)
+        Ouput : None """
 
         # Sauvegarde de l'état actuel si on met en pause
-        if self.gestionnaire.isPaused:
-            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
+        if self.gestionnaire.isPaused: # Si boolean True
+            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading())) # On prend les infos et on les stock
             return  # Arrêt temporaire
         
         # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
 
-        if self.gestionnaire.couleurTrait == "Random":
-            self.gestionnaire.CouleurRandom()
+        if self.gestionnaire.couleurTrait == "Random": # Si la couleur est aléatoire
+            self.gestionnaire.__CouleurRandom__() # On fait appel à la méthode compétente pour changer la couleur
 
+        # Partie modulable, pour dessiner en récursif la fractale
         if n == 0:
             for i in range(3):
                 self.gestionnaire.turtle.forward(l)
@@ -95,44 +182,43 @@ class FractaleSierpinski:
 
            
     def __ReprendreDessin__(self):
-        """Reprend le dessin depuis l'état sauvegardé"""
-        if self.state:
+        """Méthode qui reprend le dessin depuis l'état sauvegardé"""
+
+        if self.state: # Si boolean True
             # Récupération de l'état sauvegardé
             n, l, pos, heading = self.state.pop()
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.__DessinerSierpinski__(n, l)
-        else:
-            self.__DessinerSierpinski__(self.nombre, self.longueur)
+            self.__DessinerSierpinski__(n, l) # On transmet les valeurs sauvegardés
+        else: #Si booelan False
+            self.__DessinerSierpinski__(self.nombre, self.longueur) # On lance le dessins simplement
 
     def dessiner(self):
-        if not self.gestionnaire.isPaused:
+        """Méthode qui permet de reprendre ou non le dessin"""
+
+        if not self.gestionnaire.isPaused: # Check simple avant de dessiner si on peut
             self.__ReprendreDessin__()
 
 
 class FractaleKoch:
     def __init__(self, nombre, longueur, gestionnaire):
-        """Initialise la fractale de Koch avec une profondeur et une longueur de segment."""
         self.nombre = nombre
         self.longueur = longueur
         self.gestionnaire = gestionnaire
-        self.state = []  # Pile pour sauvegarder l'état de la récursion
+        self.state = []
 
-    def __DessinerKoch__(self, n, l):
-        """Méthode récursive pour dessiner le flocon de Koch de profondeur n et longueur l."""
-                # Sauvegarde de l'état actuel si on met en pause
+    def __DessinerKoch__(self, n, l):        
         if self.gestionnaire.isPaused:
             self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
-            return  # Arrêt temporaire
+            return
 
-        # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
         
         if self.gestionnaire.couleurTrait == "Random":
-            self.gestionnaire.CouleurRandom()
+            self.gestionnaire.__CouleurRandom__()
 
         if n == 0:
             self.gestionnaire.turtle.forward(l)
@@ -146,9 +232,7 @@ class FractaleKoch:
             self.__DessinerKoch__(n-1, l/3)
 
     def __ReprendreDessin__(self):
-        """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
-            # Récupération de l'état sauvegardé
             n, l, pos, heading = self.state.pop()
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.setposition(pos)
@@ -157,21 +241,18 @@ class FractaleKoch:
             self.__DessinerKoch__(n, l)
         else:
             self.__DessinerKoch__(self.nombre, self.longueur)
-
     
     def dessiner(self):
-        """Méthode pour dessiner le flocon de Koch en utilisant la profondeur et la longueur initiales."""
         if not self.gestionnaire.isPaused:
             self.__ReprendreDessin__()
 
 
 class FractaleVicsek:
     def __init__(self, nombre, longueur, gestionnaire):
-        """Initialisation de la fractale de Vicsek"""
         self.nombre = nombre
         self.longueur = longueur
         self.gestionnaire = gestionnaire
-        self.state = []  # Pile pour sauvegarder l'état de la récursion
+        self.state = [] 
         
     def __Carre__(self, l):
         self.gestionnaire.turtle.pendown()
@@ -180,19 +261,16 @@ class FractaleVicsek:
             self.gestionnaire.turtle.left(90)
 
     def __DessinerVicsek__(self, n, l):
-        # Sauvegarde de l'état actuel si on met en pause
         if self.gestionnaire.isPaused:
             self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
-            return  # Arrêt temporaire
+            return 
 
-        # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
 
         if self.gestionnaire.couleurTrait == "Random":
-            self.gestionnaire.CouleurRandom()
+            self.gestionnaire.__CouleurRandom__()
 
-        # Sauvegarder la position actuelle
         x = self.gestionnaire.turtle.xcor()
         y = self.gestionnaire.turtle.ycor()
         if n == 0:
@@ -227,9 +305,7 @@ class FractaleVicsek:
             self.gestionnaire.turtle.penup()
 
     def __ReprendreDessin__(self):
-        """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
-            # Récupération de l'état sauvegardé
             n, l, pos, heading = self.state.pop()
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.setposition(pos)
@@ -240,42 +316,38 @@ class FractaleVicsek:
             self.__DessinerVicsek__(self.nombre, self.longueur)
 
     def dessiner(self):
-        """Commence ou reprend le dessin"""
         if not self.gestionnaire.isPaused:
             self.__ReprendreDessin__()
 
 
 class FractaleFibonacci:
     def __init__(self, nombre, longueur, gestionnaire):
-        """Initialisation de la fractale du mot de Fibonacci"""
         self.nombre = nombre *5
         self.longueur = longueur // 100
         self.gestionnaire = gestionnaire
-        self.state = []  # Pile pour sauvegarder l'état de la récursion
+        self.state = []  
 
-    def liste(self, n):
+    def __liste__(self, n):
         if n == 1:
             return "B"
         elif n == 2:
-            return self.liste(n - 1) + "A"
+            return self.__liste__(n - 1) + "A"
         elif n > 2:
-            return self.liste(n - 1) + self.liste(n - 2)
+            return self.__liste__(n - 1) + self.__liste__(n - 2)
 
     def __DessinerFibonacci__(self, n, l):
 
-        # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
 
         if not self.gestionnaire.isPaused:
-            # Dessiner selon la séquence de Fibonacci
-            self.mot = self.liste(n)
+            self.mot = self.__liste__(n)
             self.mot = list(self.mot)
             
             for i in range(len(self.mot)):
 
                 if self.gestionnaire.couleurTrait == "Random":
-                    self.gestionnaire.CouleurRandom()
+                    self.gestionnaire.__CouleurRandom__()
                 self.gestionnaire.screen.update()
 
                 if not self.gestionnaire.isPaused:
@@ -294,15 +366,13 @@ class FractaleFibonacci:
 
 
     def __ReprendreDessin__(self):
-        """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
-            # Récupération de l'état sauvegardé
             n, l, pos, heading = self.state.pop()
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.__DessinerFibonacci__(n, l)  # Reprend le dessin
+            self.__DessinerFibonacci__(n, l) 
         else:
             self.__DessinerFibonacci__(self.nombre, self.longueur)
 
@@ -317,7 +387,7 @@ class FractalesPythagore:
         self.nombre = nombre 
         self.longueur = longueur // 5
         self.gestionnaire = gestionnaire
-        self.state = []  # Pile pour sauvegarder l'état de la récursion
+        self.state = []  
 
     def __Carre__(self,l) :
         for i in range(4) :
@@ -326,19 +396,15 @@ class FractalesPythagore:
 
 
     def __DessinerPythagore__(self,n,l) :
-
-        # Sauvegarde de l'état actuel si on met en pause
         if self.gestionnaire.isPaused:
             self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
-            return  # Arrêt temporaire
+            return 
         
-        # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
 
         if self.gestionnaire.couleurTrait == "Random":
-            self.gestionnaire.CouleurRandom()
-
+            self.gestionnaire.__CouleurRandom__()
 
         if n == 1:
             return self.__Carre__(l)
@@ -360,9 +426,7 @@ class FractalesPythagore:
             self.gestionnaire.turtle.backward(l)
 
     def __ReprendreDessin__(self):
-        """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
-            # Récupération de l'état sauvegardé
             n, l, pos, heading = self.state.pop()
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.setposition(pos)
@@ -375,3 +439,10 @@ class FractalesPythagore:
     def dessiner(self):
         if not self.gestionnaire.isPaused:
             self.__ReprendreDessin__()
+
+
+# -------------------------------------------------------------------------------------- #
+# ----------------------- FractaloPy © Tous droits réservés 2024 ----------------------- #
+# -------------------------------------------------------------------------------------- #
+
+# https://github.com/Gandalf0207/FractaloPy

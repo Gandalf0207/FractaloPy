@@ -1,3 +1,10 @@
+# -------------------------------------------------------------------------------------- #
+# ----------------------- FractaloPy © Tous droits réservés 2024 ----------------------- #
+# -------------------------------------------------------------------------------------- #
+
+# https://github.com/Gandalf0207/FractaloPy
+
+
 # Importation Fichier Settings
 from settings import *
 # Importation second script
@@ -71,34 +78,32 @@ class SetupFractale(object):
         b = int(hexColor[4:6], 16)
         luminosity = (0.299 * r + 0.587 * g + 0.114 * b) # Calcule la luminosité perçue
         return '#000000' if luminosity > 186 else '#FFFFFF' # Choisit la couleur du texte en fonction de la luminosité
-
-
-
-    def SaveAsPng(self):
-        """ Méthode permettant l'enregistrement du canvas déssiné par l'utilisateur au formet png.
-        Le script prend un screen de la fenetre canvas, le sauvgarde en PostScript et puis le convertit au format png.
-        Il ouvre une fenetre permettant à l"utilisteur de choisir le chemin d'enregistrement de l'image.
-        
-        Input : None
-        Output : image.png """
-
-        #Temps d'attente d'actualisation de la fenetre
-        time.sleep(1)
     
-        # Obtenir le chemin du fichier à enregistrer (dialogue de sauvegarde)
-        file_path = filedialog.asksaveasfilename(defaultextension=".png",
-                                                 filetypes=[("PNG files", "*.png"), ("All files", "*.*")],
-                                                 title="Enregistrer sous")
-        if file_path:
-            # Obtenir les dimensions de la fenêtre turtle
-            canvas = self.screen.getcanvas()
-            canvas.postscript(file="turtle_drawing.ps")  # Sauvegarder d'abord en PostScript
+    
+    def __ClickButtonMoveTurtle__(self, event):
+        """ Méthode privé qui place le curseur au coordonnées choisies par l'utilisateur.
+        Mise à jour de l'interface de l'utilisateur en général après cela.
 
-            # Utiliser Pillow pour convertir en PNG directement à partir de PostScript
-            img = ImageGrab.grab(bbox=(canvas.winfo_rootx(), canvas.winfo_rooty(),
-                                    canvas.winfo_rootx() + canvas.winfo_width(),
-                                    canvas.winfo_rooty() + canvas.winfo_height()))
-            img.save(file_path) # Enregistrement de l'image au chemin indiqué
+        Input : event (element tkinter)
+        Output : None
+        """
+
+        # Récupération de la largeur et longueur du canvas de dessin
+        canvas_width = canvasturtle.winfo_width()
+        canvas_height = canvasturtle.winfo_height()
+
+        # Transformation des coordonnées pour que (0,0) soit au centre du canvas
+        turtle_x = event.x - canvas_width / 2
+        turtle_y = canvas_height / 2 - event.y
+
+        # Position et mise en place de la tortue et mise à jour de l'interface utilisateur
+        self.turtle.penup()
+        self.turtle.goto((turtle_x , turtle_y))
+        self.turtle.pendown()
+        self.screen.update()
+        cadreInfosPositions.config(text=f"({turtle_x},{turtle_y})")
+
+        canvasturtle.unbind("<Button-1>") # Arret de la sélection du click Gauche
 
 
 
@@ -229,33 +234,6 @@ class SetupFractale(object):
     
 
 
-    def __ClickButtonMoveTurtle__(self, event):
-        """ Méthode privé qui place le curseur au coordonnées choisies par l'utilisateur.
-        Mise à jour de l'interface de l'utilisateur en général après cela.
-
-        Input : event (element tkinter)
-        Output : None
-        """
-
-        # Récupération de la largeur et longueur du canvas de dessin
-        canvas_width = canvasturtle.winfo_width()
-        canvas_height = canvasturtle.winfo_height()
-
-        # Transformation des coordonnées pour que (0,0) soit au centre du canvas
-        turtle_x = event.x - canvas_width / 2
-        turtle_y = canvas_height / 2 - event.y
-
-        # Position et mise en place de la tortue et mise à jour de l'interface utilisateur
-        self.turtle.penup()
-        self.turtle.goto((turtle_x , turtle_y))
-        self.turtle.pendown()
-        self.screen.update()
-        cadreInfosPositions.config(text=f"({turtle_x},{turtle_y})")
-
-        canvasturtle.unbind("<Button-1>") # Arret de la sélection du click Gauche
-
-
-
     def LancerPauseAppel(self, typeFractale = None):
         """ Méthode permettant de lancer ou de mettre en pause en fonction de l'état de la 
         pause et d'agir sur la class MainFractaleGestion
@@ -271,6 +249,35 @@ class SetupFractale(object):
             self.ModuleFractalesGestionObject.Lancer(typeFractale) # On lance avec la méthode compétente
             self.screen.update() # Assurer que l'écran est mis à jour après chaque appel
             toggle_pause() # On modifie l'affichage correcpondant pour l'interface utilisateur
+
+
+
+    def SaveAsPng(self):
+        """ Méthode permettant l'enregistrement du canvas déssiné par l'utilisateur au formet png.
+        Le script prend un screen de la fenetre canvas, le sauvgarde en PostScript et puis le convertit au format png.
+        Il ouvre une fenetre permettant à l"utilisteur de choisir le chemin d'enregistrement de l'image.
+        
+        Input : None
+        Output : image.png """
+
+        #Temps d'attente d'actualisation de la fenetre
+        time.sleep(1)
+    
+        # Obtenir le chemin du fichier à enregistrer (dialogue de sauvegarde)
+        file_path = filedialog.asksaveasfilename(defaultextension=".png",
+                                                 filetypes=[("PNG files", "*.png"), ("All files", "*.*")],
+                                                 title="Enregistrer sous")
+        if file_path:
+            # Obtenir les dimensions de la fenêtre turtle
+            canvas = self.screen.getcanvas()
+            canvas.postscript(file="turtle_drawing.ps")  # Sauvegarder d'abord en PostScript
+
+            # Utiliser Pillow pour convertir en PNG directement à partir de PostScript
+            img = ImageGrab.grab(bbox=(canvas.winfo_rootx(), canvas.winfo_rooty(),
+                                    canvas.winfo_rootx() + canvas.winfo_width(),
+                                    canvas.winfo_rooty() + canvas.winfo_height()))
+            img.save(file_path) # Enregistrement de l'image au chemin indiqué
+
 
 
 
@@ -310,37 +317,28 @@ fenetre.title("FractaloPY | © Cyanne Théo Loan Quentin")
 # --------------------------- CANVAS ---------------------------- #
 # --------------------------------------------------------------- #
 
+# Frame qui contien le canvas et les bouton pause
 frameBoxCanvas = Frame(fenetre, bg = None)
-frameBoxCanvas.pack(expand=True, fill=BOTH)
+frameBoxCanvas.pack(side = RIGHT, expand=True, fill=BOTH)
 
+# Setup des elements turtle
 canvasturtle = ScrolledCanvas(frameBoxCanvas)
 canvasturtle.pack(expand=True, fill=BOTH)
-
-# Set up the turtle screen using the canvas
 screen = TurtleScreen(canvasturtle)
-
-# Create a turtle instance attached to the screen
 turtle = RawTurtle(screen)
 screen.tracer(0)
 
 # Box boutton pause et generation d'image
 frameBoxButton = Frame(frameBoxCanvas, bg="blue")
 frameBoxButton.pack(side=BOTTOM, fill='x')
-
 # Bouton lancer/pause (gauche)
 buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause())
 buttonLancerPause.pack(side=LEFT, pady=10, padx=10)
-
-
+# Appel pour choisir et lancer la fractale
+buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
 # Boutton Générer une image (droite)
 buttonMakePlotToImg = Button(frameBoxButton,text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
 buttonMakePlotToImg.pack(side=RIGHT, pady=10, padx=10)
-
-
-# Appel pour choisir et lancer la fractale
-buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
-
-
 
 
 
@@ -349,10 +347,9 @@ buttonLancerPause.config(command=lambda: toggle_pause(fractaleType.get()))
 # ------------------- PANEL DE MODIFICATION --------------------- #
 # --------------------------------------------------------------- #
 
+# frame global panel modif
 framePanelModif = Frame(fenetre, bg = bgFramePanelModif, width=widthFrameModifPanel)
-framePanelModif.pack(side=LEFT, expand=False, fill='y', padx=10, pady=10)
-
-
+framePanelModif.pack(anchor=W, side=LEFT, expand=False, fill='y', padx=10, pady=10)
 
 # Box1 : Profondeur
 box1Profondeur = Frame(framePanelModif, bg = None)
@@ -408,7 +405,6 @@ textOrientation.pack(fill='x')
 scrollBarOrientation = Scale(box6Orientation, variable=valeurOrientation, orient='horizontal', from_=0, to=360, showvalue=0, command=lambda value:object1.OrientationAffichage(value = value, textOrientation = textOrientation))
 scrollBarOrientation.pack(fill='x')
 
-
 #box 7 : épaisseur trait
 box7Epaisseur = Frame(framePanelModif, bg = None)
 box7Epaisseur.pack(fill='x', pady = 5, padx = 5)
@@ -427,7 +423,6 @@ textButtonCurseurPosition.pack(fill='x')
 cadreInfosPositions = Label(box8CurseurPosition, bg = None, text=f"{turtle.pos()}")
 cadreInfosPositions.pack(fill='x')
 
-
 # box 9 : Ajout d'un menu pour le choix des fractales
 box9ChoixFractale = Frame(framePanelModif, bg=None)
 box9ChoixFractale.pack(pady=5, padx=5, fill='x')
@@ -439,12 +434,20 @@ choixFractaleMenu.pack(fill='x')
 
 
 
-
-
-
 # --------------------------------------------------------------- #
 # ----------------- INITIALISATION DE L'OBJET ------------------- #
 # --------------------------------------------------------------- #
+
+# Initialisation avec les valeurs par défault
 object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',longueurTrait=200,couleurBackground="#ffffff", turtle=turtle, screen= screen)
 
+# fenetre loop 
 fenetre.mainloop()
+
+
+
+# -------------------------------------------------------------------------------------- #
+# ----------------------- FractaloPy © Tous droits réservés 2024 ----------------------- #
+# -------------------------------------------------------------------------------------- #
+
+# https://github.com/Gandalf0207/FractaloPy

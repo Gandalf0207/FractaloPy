@@ -11,5 +11,18 @@ from PIL import ImageGrab
 import time
 # Module Random
 from random import randint
+# Module Webbrowser
+import webbrowser
 
+
+# Liste du nombre de fractale pour l'interface utilisateur
 fractaleListe = ("Sierpinski", "Koch", "Vicsek", "Fibonacci", "Pythagore")
+
+
+
+
+# -------------------------------------------------------------------------------------- #
+# ----------------------- FractaloPy © Tous droits réservés 2024 ----------------------- #
+# -------------------------------------------------------------------------------------- #
+
+# https://github.com/Gandalf0207/FractaloPy
