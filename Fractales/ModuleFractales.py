@@ -105,7 +105,7 @@ class MainFractaleGestion(object):
             self.fractale.dessiner() # On appel la méthode pour dessiner le tout
             
         elif self.isFinished == False: # Si ce n'est pas terminé
-            self.fractale.dessiner() # On termone de dessiner
+            self.fractale.dessiner() # On termine de dessiner
             self.isFinished = True # On indique que le dessin est terminé
 
 

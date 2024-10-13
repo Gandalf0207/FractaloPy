@@ -298,6 +298,10 @@ def toggle_pause(typeFractale = None):
 
 
 def LienOuvrir(lien):
+    """ Fonction pour ouvrir un lien dans un navigateur
+    
+    Input : None
+    Ouput : None """
     webbrowser.open_new(lien)
 
 # --------------------------------------------------------------- #
