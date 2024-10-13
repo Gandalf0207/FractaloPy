@@ -62,7 +62,7 @@ class FractaleSierpinski:
         self.gestionnaire = gestionnaire
         self.state = []  # Pile pour sauvegarder l'état de la récursion
 
-    def dessiner_sierpinski(self, n, l):
+    def __DessinerSierpinski__(self, n, l):
 
         # Sauvegarde de l'état actuel si on met en pause
         if self.gestionnaire.isPaused:
@@ -81,20 +81,20 @@ class FractaleSierpinski:
                 self.gestionnaire.turtle.forward(l)
                 self.gestionnaire.turtle.left(120)
         else:
-            self.dessiner_sierpinski(n - 1, l / 2)
+            self.__DessinerSierpinski__(n - 1, l / 2)
             self.gestionnaire.turtle.forward(l / 2)
-            self.dessiner_sierpinski(n - 1, l / 2)
+            self.__DessinerSierpinski__(n - 1, l / 2)
             self.gestionnaire.turtle.backward(l / 2)
             self.gestionnaire.turtle.left(60)
             self.gestionnaire.turtle.forward(l / 2)
             self.gestionnaire.turtle.right(60)
-            self.dessiner_sierpinski(n - 1, l / 2)
+            self.__DessinerSierpinski__(n - 1, l / 2)
             self.gestionnaire.turtle.left(60)
             self.gestionnaire.turtle.backward(l / 2)
             self.gestionnaire.turtle.right(60)
 
            
-    def reprendre_dessin(self):
+    def __ReprendreDessin__(self):
         """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
             # Récupération de l'état sauvegardé
@@ -103,13 +103,13 @@ class FractaleSierpinski:
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.dessiner_sierpinski(n, l)
+            self.__DessinerSierpinski__(n, l)
         else:
-            self.dessiner_sierpinski(self.nombre, self.longueur)
+            self.__DessinerSierpinski__(self.nombre, self.longueur)
 
     def dessiner(self):
         if not self.gestionnaire.isPaused:
-            self.reprendre_dessin()
+            self.__ReprendreDessin__()
 
 
 class FractaleKoch:
@@ -120,7 +120,7 @@ class FractaleKoch:
         self.gestionnaire = gestionnaire
         self.state = []  # Pile pour sauvegarder l'état de la récursion
 
-    def dessiner_koch(self, n, l):
+    def __DessinerKoch__(self, n, l):
         """Méthode récursive pour dessiner le flocon de Koch de profondeur n et longueur l."""
                 # Sauvegarde de l'état actuel si on met en pause
         if self.gestionnaire.isPaused:
@@ -137,15 +137,15 @@ class FractaleKoch:
         if n == 0:
             self.gestionnaire.turtle.forward(l)
         else:
-            self.dessiner_koch(n-1, l/3)
+            self.__DessinerKoch__(n-1, l/3)
             self.gestionnaire.turtle.left(60)
-            self.dessiner_koch(n-1, l/3)
+            self.__DessinerKoch__(n-1, l/3)
             self.gestionnaire.turtle.left(-120)
-            self.dessiner_koch(n-1, l/3)
+            self.__DessinerKoch__(n-1, l/3)
             self.gestionnaire.turtle.left(60)
-            self.dessiner_koch(n-1, l/3)
+            self.__DessinerKoch__(n-1, l/3)
 
-    def reprendre_dessin(self):
+    def __ReprendreDessin__(self):
         """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
             # Récupération de l'état sauvegardé
@@ -154,15 +154,15 @@ class FractaleKoch:
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.dessiner_koch(n, l)
+            self.__DessinerKoch__(n, l)
         else:
-            self.dessiner_koch(self.nombre, self.longueur)
+            self.__DessinerKoch__(self.nombre, self.longueur)
 
     
     def dessiner(self):
         """Méthode pour dessiner le flocon de Koch en utilisant la profondeur et la longueur initiales."""
         if not self.gestionnaire.isPaused:
-            self.reprendre_dessin()
+            self.__ReprendreDessin__()
 
 
 class FractaleVicsek:
@@ -173,13 +173,13 @@ class FractaleVicsek:
         self.gestionnaire = gestionnaire
         self.state = []  # Pile pour sauvegarder l'état de la récursion
         
-    def carre(self, l):
+    def __Carre__(self, l):
         self.gestionnaire.turtle.pendown()
         for i in range(4):
             self.gestionnaire.turtle.forward(l)
             self.gestionnaire.turtle.left(90)
 
-    def dessiner_Vicsek(self, n, l):
+    def __DessinerVicsek__(self, n, l):
         # Sauvegarde de l'état actuel si on met en pause
         if self.gestionnaire.isPaused:
             self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
@@ -196,37 +196,37 @@ class FractaleVicsek:
         x = self.gestionnaire.turtle.xcor()
         y = self.gestionnaire.turtle.ycor()
         if n == 0:
-            self.carre(l)
+            self.__Carre__(l)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x+l*2,y)
-            self.carre(l)
+            self.__Carre__(l)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x+l,y+l)
-            self.carre(l)
+            self.__Carre__(l)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x,y+l*2)
-            self.carre(l)
+            self.__Carre__(l)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x+l*2,y+l*2)
-            self.carre(l)
+            self.__Carre__(l)
             self.gestionnaire.turtle.penup()
         elif n > 0:
-            self.dessiner_Vicsek(n-1,l/3)
+            self.__DessinerVicsek__(n-1,l/3)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x+l*2,y)
-            self.dessiner_Vicsek(n-1,l/3)
+            self.__DessinerVicsek__(n-1,l/3)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x+l,y+l)
-            self.dessiner_Vicsek(n-1,l/3)
+            self.__DessinerVicsek__(n-1,l/3)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x,y+l*2)
-            self.dessiner_Vicsek(n-1,l/3)
+            self.__DessinerVicsek__(n-1,l/3)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.goto(x+l*2,y+l*2)
-            self.dessiner_Vicsek(n-1,l/3)
+            self.__DessinerVicsek__(n-1,l/3)
             self.gestionnaire.turtle.penup()
 
-    def reprendre_dessin(self):
+    def __ReprendreDessin__(self):
         """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
             # Récupération de l'état sauvegardé
@@ -235,14 +235,14 @@ class FractaleVicsek:
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.dessiner_Vicsek(n, l)
+            self.__DessinerVicsek__(n, l)
         else:
-            self.dessiner_Vicsek(self.nombre, self.longueur)
+            self.__DessinerVicsek__(self.nombre, self.longueur)
 
     def dessiner(self):
         """Commence ou reprend le dessin"""
         if not self.gestionnaire.isPaused:
-            self.reprendre_dessin()
+            self.__ReprendreDessin__()
 
 
 class FractaleFibonacci:
@@ -261,7 +261,7 @@ class FractaleFibonacci:
         elif n > 2:
             return self.liste(n - 1) + self.liste(n - 2)
 
-    def dessiner_Fibonacci(self, n, l):
+    def __DessinerFibonacci__(self, n, l):
 
         # Paramétrage de la tortue
         self.gestionnaire.turtle.speed(10)
@@ -293,7 +293,7 @@ class FractaleFibonacci:
                     self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
 
 
-    def reprendre_dessin(self):
+    def __ReprendreDessin__(self):
         """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
             # Récupération de l'état sauvegardé
@@ -302,14 +302,14 @@ class FractaleFibonacci:
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.dessiner_Fibonacci(n, l)  # Reprend le dessin
+            self.__DessinerFibonacci__(n, l)  # Reprend le dessin
         else:
-            self.dessiner_Fibonacci(self.nombre, self.longueur)
+            self.__DessinerFibonacci__(self.nombre, self.longueur)
 
     def dessiner(self):
         """Méthode pour démarrer ou reprendre le dessin"""
         if not self.gestionnaire.isPaused:
-            self.reprendre_dessin()
+            self.__ReprendreDessin__()
 
 
 class FractalesPythagore:
@@ -319,13 +319,13 @@ class FractalesPythagore:
         self.gestionnaire = gestionnaire
         self.state = []  # Pile pour sauvegarder l'état de la récursion
 
-    def carre(self,l) :
+    def __Carre__(self,l) :
         for i in range(4) :
             self.gestionnaire.turtle.forward(l)
             self.gestionnaire.turtle.right(90)
 
 
-    def dessiner_pythagore(self,n,l) :
+    def __DessinerPythagore__(self,n,l) :
 
         # Sauvegarde de l'état actuel si on met en pause
         if self.gestionnaire.isPaused:
@@ -341,25 +341,25 @@ class FractalesPythagore:
 
 
         if n == 1:
-            return self.carre(l)
+            return self.__Carre__(l)
         if n > 1 :
-            self.carre(l)
+            self.__Carre__(l)
             self.gestionnaire.turtle.forward(l)
             racine_cote = l/(2**(1/2))
             self.gestionnaire.turtle.left(45)
-            self.dessiner_pythagore(n-1, racine_cote)
+            self.__DessinerPythagore__(n-1, racine_cote)
             self.gestionnaire.turtle.right(90)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.forward(racine_cote)
             self.gestionnaire.turtle.pendown()
-            self.dessiner_pythagore(n-1, racine_cote)
+            self.__DessinerPythagore__(n-1, racine_cote)
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.backward(racine_cote)
             self.gestionnaire.turtle.pendown()
             self.gestionnaire.turtle.left(45)
             self.gestionnaire.turtle.backward(l)
 
-    def reprendre_dessin(self):
+    def __ReprendreDessin__(self):
         """Reprend le dessin depuis l'état sauvegardé"""
         if self.state:
             # Récupération de l'état sauvegardé
@@ -368,10 +368,10 @@ class FractalesPythagore:
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.dessiner_pythagore(n, l)
+            self.__DessinerPythagore__(n, l)
         else:
-            self.dessiner_pythagore(self.nombre, self.longueur)
+            self.__DessinerPythagore__(self.nombre, self.longueur)
 
     def dessiner(self):
         if not self.gestionnaire.isPaused:
-            self.reprendre_dessin()
+            self.__ReprendreDessin__()
