@@ -81,13 +81,13 @@ class <nomFractale>:
         self.nombre = nombre
         self.longueur = longueur
         self.gestionnaire = gestionnaire
-        self.state = []  # Pile pour sauvegarder l'état de la récursion
+        self.state = []
 
     # Méthode obligatoire (modifiable)
     def __Dessiner< nom >__(self, n, l):
 
         # Élément non modifiable
-        if self.gestionnaire.isPaused: # Si boolean True
+        if self.gestionnaire.isPaused:
             self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
             return
         
