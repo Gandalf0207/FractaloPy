@@ -4,6 +4,8 @@
 > [!IMPORTANT]
 > Pour toutes informations concernant les droits d'utilisation, veillez vous référer à la [Licence](https://github.com/Gandalf0207/FractaloPy?tab=License-1-ov-file)
 
+> [!WARNING]
+> Ce projet a été développé sur la version 3.12.6 de python sur l'OS Windows 11. Veuillez vérifier les compatibilités de versions des logiciels que vous utilisez. De plus, ce projet n'est, en aucun cas, certifié infaillible, il peut donc contenir des bugs... Merci de votre compréhension.
 
 ## Présentation du Projet :
 Ce projet a été réalisé dans le cadre de l'enseignement NSI (Numérique et Sciences Informatiques) en Terminale. Il s'agit d'une interface graphique (GUI) en Python utilisant le module Turtle pour générer différentses fractales. L'utilisateur peut interagir avec l'interface pour modifier les paramètres de génération des fractales, comme le nombre de niveaux de récursivité, la taille des éléments et bien d'autres !
@@ -14,7 +16,7 @@ Ce projet a été réalisé dans le cadre de l'enseignement NSI (Numérique et S
 - **Programmation orientée objet** : pour structurer le code en différentes classes et rendre le programme plus modulaire / compréhensible par des développeurs externe.
 - **Modularité** : le programme est organisé de manière à pouvoir facilement ajouter d'autres types de fractales, de nouvelles fonctionnalités à l'avenir ou encore pour être utilisé en partie par d'autre developpeurs.
 
-<br></br>
+<br>
 
 > Le projet met à disposition 5 types de fractales différentes :
 
@@ -24,7 +26,7 @@ Ce projet a été réalisé dans le cadre de l'enseignement NSI (Numérique et S
 - Fractale de **Vicsek**
 - Fractale de **Pythagore**
 
-<br></br>
+<br>
 
 > Le panel de modification des valeurs :
 
@@ -41,7 +43,7 @@ Pour ce faire, nous vous mettons à disposition la possibiliser de modifier :
 
 De plus, vous avez la possibilité d'enregister, si vous le souhaitez une ou plusieurs image(s) de votre travail !
 
-<br></br>
+
 <br></br>
 
 ## Intégration développeurs :
@@ -62,6 +64,7 @@ Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractal
 
 .... Autres class.... 
 
+<br>
 
 #### Model pour ajouter des fractales : 
 
@@ -72,65 +75,53 @@ Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractal
 
 ```Python3
 class <nomFractale>:
-    """ class permettant de dessiner et de gérer globalement la fractale en cours de dessin / en pause"""
 
+    # Méthode obligatoire (non modifiable)
     def __init__(self, nombre, longueur, gestionnaire):
-        """Méthode d'initialisation de la class, grâce à l'intanciation de la class. 
-    
-        Input : nombre (int), 
-                longueur (int), 
-                gestionnaire (class parent), 
-        Output : None """
-    
         self.nombre = nombre
         self.longueur = longueur
         self.gestionnaire = gestionnaire
         self.state = []  # Pile pour sauvegarder l'état de la récursion
-    
+
+    # Méthode obligatoire (modifiable)
     def __Dessiner< nom >__(self, n, l):
-        """ Méthode privé permettant le dessin de la fractale appelé, 
-        ainsi que la sauvegarde de son état d'avancement si pause il y a. 
-        
-        Input : n (int),
-                l (int)
-        Ouput : None """
-    
-        # Sauvegarde de l'état actuel si on met en pause
+
+        # Élément non modifiable
         if self.gestionnaire.isPaused: # Si boolean True
-            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading())) # On prend les infos et on les stock
-            return  # Arrêt temporaire
+            self.state.append((n, l, self.gestionnaire.turtle.position(), self.gestionnaire.turtle.heading()))
+            return
         
-        # Paramétrage de la tortue
+        # Élément non modifiable
         self.gestionnaire.turtle.speed(10)
         self.gestionnaire.screen.update()
-    
-        if self.gestionnaire.couleurTrait == "Random": # Si la couleur est aléatoire
-            self.gestionnaire.__CouleurRandom__() # On fait appel à la méthode compétente pour changer la couleur
+
+        # Élément non modifiable
+        if self.gestionnaire.couleurTrait == "Random":
+            self.gestionnaire.__CouleurRandom__()
     
         # Partie modulable, pour dessiner en récursif la fractale
+        # Élément modifiable
         < script récursif de votre fractale >
     
-           
-    def __ReprendreDessin__(self):
-        """Méthode qui reprend le dessin depuis l'état sauvegardé"""
-    
-        if self.state: # Si boolean True
-            # Récupération de l'état sauvegardé
+    # Méthode obligatoire (modifiable)  
+    def __ReprendreDessin__(self):    
+        if self.state:
             n, l, pos, heading = self.state.pop()
             self.gestionnaire.turtle.penup()
             self.gestionnaire.turtle.setposition(pos)
             self.gestionnaire.turtle.setheading(heading)
             self.gestionnaire.turtle.pendown()
-            self.__Dessiner< nom >__(n, l) # On transmet les valeurs sauvegardés
-        else: #Si booelan False
-            self.__Dessiner< nom >__(self.nombre, self.longueur) # On lance le dessins simplement
-    
+            self.__Dessiner< nom >__(n, l) # Modification ici
+        else:
+            self.__Dessiner< nom >__(self.nombre, self.longueur)
+
+    # Méthode obligatoire (non modifiable)
     def dessiner(self):
-        """Méthode qui permet de reprendre ou non le dessin"""
-    
-        if not self.gestionnaire.isPaused: # Check simple avant de dessiner si on peut
+        if not self.gestionnaire.isPaused:
             self.__ReprendreDessin__()
 ```
+
+<br>
 
 > Après avoir ajouté votre `classFractale`, vous devez configurer l'option d'appel de votre nouvelle class. Pour ce faire, dans le fichier `ModuleFractales.py`, dans la class `MainFractaleGestion`, dans la méthode `Lancer` respecter la disposition suivante et ajouter votre nouvelle `classFractale`
 
@@ -139,8 +130,6 @@ class <nomFractale>:
 
 ```Python3
 class MainFractaleGestion(object):
-    """ class de MainGestion Fractale qui permet lors de l'appel de la méthode lancer,
-    d'éxécuter et de lancer les script adéquats aux demandes de l'utilisateurs  """
     def __init__(self,**args):
         pass
 
@@ -151,10 +140,12 @@ class MainFractaleGestion(object):
             case "Koch":
                 self.fractale = FractaleKoch(self.profondeur, self.longueurTrait, self)
             case "<nomFractaleSimple>":
-                self.fractale = <nomFractale>(self.profondeur, self.longueurTrait, self)
+                self.fractale = < nomFractale >(self.profondeur, self.longueurTrait, self)
             ...
         self.fractale.dessiner()
 ```
+
+<br>
 
 > Enfin, il faut ajouter le `nomFractaleSimple`, de l'étape précédente dans la variable `fractaleListe` du fichier `settings.py`.
 
@@ -163,7 +154,7 @@ fractaleListe = ("Sierpinski", "Koch","<nomFractaleSimple>")
 ```
 
 
-<br></br>
+
 <br></br>
 
 ## Installation : 
@@ -187,7 +178,7 @@ Après cela, exécuter le fichier `Main.py`
 > [!TIP]
 > Assurez-vous d'avoir les droits nécessaires et que Python soit correctement installé au préalable sur votre machine.
 
-<br></br>
+
 <br></br>
 
 
