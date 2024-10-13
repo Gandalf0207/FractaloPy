@@ -340,7 +340,7 @@ frameBoxButton = Frame(frameBoxCanvas, bg="blue")
 frameBoxButton.pack(side=BOTTOM, fill='x')
 
 # Bouton lancer/pause (gauche)
-buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause())
+buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause(fractaleType.get()))
 # Utilisation de grid pour positionner
 buttonLancerPause.grid(row=0, column=0, padx=10, pady=10)
 
