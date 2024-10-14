@@ -50,7 +50,7 @@ De plus, vous avez la possibilité d'enregister, si vous le souhaitez une ou plu
 
 Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractales / récupérer les différentes ```class object```, ou bien simplement comprendre le code source de $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$. Alors ces différentes interfaces sont pour vous !
 
-
+### Main.py 
 #### class Setup
 
 | Fonctions                                                                                                                           | Description                                                                                                             |
@@ -67,11 +67,13 @@ Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractal
 | def LancerPauseAppel(self, typeFractale = None):                                                                                    | Méthode permettant de lancer ou de mettre en pause en fonction de l'état de la pause et d'agir sur la class MainFractaleGestion <br></br> Input : <br> - typeFractale : (str) None si aucune valeur envoyé <br> Output : None                                                                                                                                                                       |
 | def SaveAsPng(self):                                                                                                                | Méthode permettant l'enregistrement du canvas déssiné par l'utilisateur au formet png. Le script prend un screen de la fenetre canvas, le sauvgarde en PostScript et puis le convertit au format png. Il ouvre une fenetre permettant à l"utilisteur de choisir le chemin d'enregistrement de l'image. <br></br> Input : None <br> Output : image.png                                          |
 
+#### Fonctions autre 
+| Fonctions                                                                                                                           | Description                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| def toggle_pause(typeFractale = None):                                                                                              | Fonction qui permet de mettre à jour l'affichage du bouton pause et d'appeler la méthode compétente <br></br> Input : <br> - typeFractale (str ou None si aucune valeur) <br> Output : None         |
+| def LienOuvrir(lien):                                                                                                               | Fonction pour ouvrir un lien dans un navigateur <br></br> Input : <br> None Ouput : None        |
 
 
-
-|         |         |
-|         |         |
 |         |         |
 |         |         |
 |         |         |
