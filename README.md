@@ -70,14 +70,30 @@ Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractal
 #### Fonctions autre 
 | Fonctions                                                                                                                           | Description                                                                                                             |
 | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| def toggle_pause(typeFractale = None):                                                                                              | Fonction qui permet de mettre à jour l'affichage du bouton pause et d'appeler la méthode compétente <br></br> Input : <br> - typeFractale (str ou None si aucune valeur) <br> Output : None         |
-| def LienOuvrir(lien):                                                                                                               | Fonction pour ouvrir un lien dans un navigateur <br></br> Input : <br> None Ouput : None        |
+| def toggle_pause(typeFractale = None):                                                                                              | Fonction qui permet de mettre à jour l'affichage du bouton pause et d'appeler la méthode compétente <br></br> Input : <br> - typeFractale (str ou None si aucune valeur) <br> Output : None                                                                                                                                                                                                  |
+| def LienOuvrir(lien):                                                                                                               | Fonction pour ouvrir un lien dans un navigateur <br></br> Input : <br> None Ouput : None                                |
 
+<br>
 
-|         |         |
-|         |         |
-|         |         |
-|         |         |
+### ModuleFractales.py
+#### class MainFractaleGestion
+| Fonctions                                                                                                                           | Description                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| def __init__(self, profondeur, couleurTrait, longueurTrait, turtle, screen) -> None:                                                | Méthode permettant d'initialiser les valeurs de la class MainFractaleGestion  <br></br>   Input : <br> - profondeur (int), <br> - couleurTrait (str), <br> - longueurTrait (int), <br> - turtle (turtle element), <br> - screen (turtle element) <br> Output : None                                                                                                                               |
+| def ChangerProfondeur(self, profondeur):                                                                                            | Méthode pour mettre à jour la profondeur de génération <br></br>   Input : <br> - profondeur (int) <br> Output : None   |
+| def ChangerCouleur(self, newCouleurTrait):                                                                                          | Méthode permettant de metrre à jour la couleur du trait de dessin <br></br>    Intput : <br> - newCouleurTrait (str) <br> Output : None                                                                                                                                                                                                                                                            |
+| def ChangerlongueurTrait(self, newlongueurTrait):                                                                                   | Méthode pour changer la longueur du trait de dessin <br></br>   Input : <br> - newlongueurTrait (int) <br>  Output : None                                                                                                                                                                                                                                                                             |
+| def Lancer(self, fractaleType):                                                                                                     |  Méthode pour lancer la génération de la bonne fractale et de reprendre si pas terminé <br></br>   Input : <br> -  fractaleType (str) <br>  Output : None                                                                                                                                                                                                                                             |
+| def Pause(self):                                                                                                                    | Méthode de mise en pause <br></br>    Input : None <br> Output : None                                                   |
+
+        
+|            |            |
+|            |            |
+|            |            |
+|            |            |
+|            |            |
+|            |            |
+|            |            |
 
 
 
