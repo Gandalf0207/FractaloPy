@@ -86,18 +86,11 @@ Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractal
 | def Lancer(self, fractaleType):                                                                                                     |  Méthode pour lancer la génération de la bonne fractale et de reprendre si pas terminé <br></br>   Input : <br> -  fractaleType (str) <br>  Output : None                                                                                                                                                                                                                                             |
 | def Pause(self):                                                                                                                    | Méthode de mise en pause <br></br>    Input : None <br> Output : None                                                   |
 
-        
-|            |            |
-|            |            |
-|            |            |
-|            |            |
-|            |            |
-|            |            |
-|            |            |
-
-
-
-.... Autres class.... 
+#### class FractaleSierpinskie : Même interface pour les autres class de meme type.
+| Fonctions                                                                                                                           | Description                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| def __init__(self, nombre, longueur, gestionnaire):                                                                                 | Méthode d'initialisation de la class, grâce à l'intanciation de la class. <br></br>   Input : <br>  - nombre (int), <br> - longueur (int), <br>  - gestionnaire (class parent), <br>  Output : None                                                                                                                                                                                                 |
+| def dessiner(self):                                                                                                                 | Méthode qui permet de reprendre ou non le dessin                                                                        |
 
 <br>
 
