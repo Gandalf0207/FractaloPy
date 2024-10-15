@@ -12,12 +12,12 @@ from Fractales import ModuleFractales
 
 
 class SetupFractale(object):
-    """ Class contenant toutes les méthodes permettant de modifier les paramettreS de génération de la fractale;
+    """ Class contenant toutes les méthodes permettant de modifier les paramettres de génération de la fractale;
         Instanciation de la class MainFractaleGestion. """
     
     def __init__(self, profondeur, couleurTrait, longueurTrait, couleurBackground, turtle, screen) -> None:
         """ Méthode d'initialisation de la class, grâce à l'intanciation de la class par l'objet1. 
-        Cette méthode, permet donc la création de cette meme class et l'instanciation de la class MainFractaleFestion
+        Cette méthode permet donc la création de cette meme class et l'instanciation de la class MainFractaleFestion
 
         Input : prodondeur (int), 
                 couleurTrait (str), 
@@ -41,7 +41,7 @@ class SetupFractale(object):
 
 
     def __QuestionTkinter__(self, titreFenetre, textFenetre):
-        """ Méthode privé pour ouvrir une fenetre qui pause une question à l'utilisateur
+        """ Méthode privé pour ouvrir une fenetre qui pose une question à l'utilisateur
         
         Input : titreFenetre (str),
                 textFenetre (str)      
@@ -108,7 +108,7 @@ class SetupFractale(object):
 
 
     def ProfondeurAffichage(self, value, textProfondeur):
-        """ Méthode modifiant l'affiche de la valeur de prodondeur sur l'interface utilisteur
+        """ Méthode modifiant l'affichage de la valeur de prodondeur sur l'interface utilisteur
         et sur les attributs de MainFractaleGestion.
         
         Input : value (str),
@@ -122,7 +122,7 @@ class SetupFractale(object):
 
 
     def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
-        """ Méthode modifiant l'affiche de la valeur couleur sur l'interface utilisteur (code + bg visualisation)
+        """ Méthode modifiant l'affichage de la valeur couleur sur l'interface utilisteur (code + bg visualisation)
         et sur les attributs de MainFractaleGestion. (soit unique / soit aléatoire). Ouverture d'une fenetre
         question (unique / aléatoire). Ouverture d'une fenetre que choix de couleur.
         
@@ -131,7 +131,7 @@ class SetupFractale(object):
         Output : None """
 
         # Appel de la méthode privé 
-        reponseUtilisateur = self.__QuestionTkinter__("Choix Couleur Type", "Voulez vous une génération aléatoire de couleurs ?")
+        reponseUtilisateur = self.__QuestionTkinter__("Choix Couleur Type", "Voulez-vous une génération aléatoire de couleurs ?")
         # Action différente en fonction de la réponse utilisateur
         if reponseUtilisateur == 'no': # Gestion de la couleur unique
             colors = self.__PanelCouleurTkinter__(titreFenetre='trait') # Appel ouverture fenetre choix couleur
@@ -156,16 +156,16 @@ class SetupFractale(object):
                 textLongueurTrait (variable tkinter) 
         Output : None """
 
-        self.longueurTrait = int(value) # Modification de la valeur de longueurtrait au sein de la class
+        self.longueurTrait = int(value) # Modification de la valeur de longueurTrait au sein de la class
         textlongueurTrait.config(text=f"Longueur trait : {value}") # Modification du text interface utilisateur
         self.ModuleFractalesGestionObject.ChangerlongueurTrait(self.longueurTrait) # Actualisation de la valeur dans MainFractaleGestion
 
 
 
     def ClearMake(self, cadreVisuelBackground):
-        """ Méthode permettant de supprimer tout ce qui se trouve sur le canvas. Avant cela le script 
-        demande une confirmation sous forme d'une fenetre avec une question. Et une possibilité de sauvegarder 
-        ou non une image du dessin. Après cela, l'interface utilisateur est mise à jour 
+        """ Méthode permettant de supprimer tout ce qui se trouve sur le canvas. Avant le script 
+        demande une confirmation sous forme d'une fenetre avec une question et une possibilité de sauvegarder 
+        ou non une image du dessin. Après, l'interface utilisateur est mise à jour 
         
         Input : cadreVisuelBackground (element tkinter)
         Output : None """
@@ -235,8 +235,7 @@ class SetupFractale(object):
 
 
     def LancerPauseAppel(self, typeFractale = None):
-        """ Méthode permettant de lancer ou de mettre en pause en fonction de l'état de la 
-        pause et d'agir sur la class MainFractaleGestion
+        """ Méthode permettant de lancer ou de mettre en pause en fonction de l'état de l'attribut et d'agir sur la class MainFractaleGestion
         
         Input : typeFractale : (str) None si aucune valeur envoyé
         Output : None """
