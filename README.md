@@ -72,6 +72,7 @@ Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractal
 | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | def toggle_pause(typeFractale = None):                                                                                              | Fonction qui permet de mettre à jour l'affichage du bouton pause et d'appeler la méthode compétente <br></br> Input : <br> - typeFractale (str ou None si aucune valeur) <br> Output : None                                                                                                                                                                                                  |
 | def LienOuvrir(lien):                                                                                                               | Fonction pour ouvrir un lien dans un navigateur <br></br> Input : <br> None Ouput : None                                |
+| def SeparatorAdd():                                                                                                                 | Fonction qui ajoute un séparateur pour épurer l'affichage <br></br> Input : <br> None Ouput : None                      |
 
 <br>
 
