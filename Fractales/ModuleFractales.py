@@ -88,7 +88,7 @@ class MainFractaleGestion(object):
         self.isPaused = False # On enlève la pause
 
         # Sélectionne et dessine la fractale en fonction du type
-        if self.isFinished == True or fractaleType != self.fractaleType: # Si erminé et nouvelle fractale
+        if self.isFinished == True or fractaleType != self.fractaleType: # Si terminé et nouvelle fractale
             self.fractaleType = fractaleType #  On actualise la nouvelle fractale
             self.isFinished = False # On indique de ce n'est pas terminé
             match fractaleType: # on check et on initialise le bon object de fractale
@@ -144,7 +144,7 @@ class FractaleSierpinski:
 
     def __DessinerSierpinski__(self, n, l):
         """ Méthode privé permettant le dessin de la fractale appelé, 
-        ainsi que la sauvegarde de son état d'avancement si pause il y a. 
+        ainsi que la sauvegarde de son état d'avancement s'il y a une pause.
         
         Input : n (int),
                 l (int)
