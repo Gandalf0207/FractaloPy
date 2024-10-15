@@ -306,8 +306,11 @@ def LienOuvrir(lien):
 
 
 def SeparatorAdd():
-    """ Fonction qui ajoute un séparateur pour épurer l'affichage"""
+    """ Fonction qui ajoute un séparateur pour épurer l'affichage
     
+    Input : None
+    Ouput : None """
+
     # Ajout d'un séparateur entre les sections
     separator = ttk.Separator(framePanelModif, orient='horizontal')
     separator.pack(fill='x', pady=5)
