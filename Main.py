@@ -41,7 +41,7 @@ class SetupFractale(object):
 
 
     def __QuestionTkinter__(self, titreFenetre, textFenetre):
-        """ Méthode privé pour ouvrir une fenetre qui pose une question à l'utilisateur
+        """ Méthode privée pour ouvrir une fenetre qui pose une question à l'utilisateur
         
         Input : titreFenetre (str),
                 textFenetre (str)      
@@ -53,7 +53,7 @@ class SetupFractale(object):
 
 
     def __PanelCouleurTkinter__(self, titreFenetre):
-        """ Méthode privé pour ouvrir une fenetre de choix de couleur
+        """ Méthode privée pour ouvrir une fenetre de choix de couleur
         
         Input : titreFenetre (str),       
         Output : askcolor window (element tkinter) """
@@ -64,7 +64,7 @@ class SetupFractale(object):
 
 
     def __LuminosityColor__(self, hexColor):  
-        """ Méthode privé pour calculer le niveau de luminosité d'une couleur depuis son code héxadécimal.
+        """ Méthode privée pour calculer le niveau de luminosité d'une couleur depuis son code héxadécimal.
         Dans le but de retourner une couleur contrasté avec ce niveau de luminosité, pour favoriser le confort 
         et l'accessibilité de lecture de l'utilisteur.
         
@@ -81,7 +81,7 @@ class SetupFractale(object):
     
     
     def __ClickButtonMoveTurtle__(self, event):
-        """ Méthode privé qui place le curseur au coordonnées choisies par l'utilisateur.
+        """ Méthode privée qui place le curseur au coordonnées choisies par l'utilisateur.
         Mise à jour de l'interface de l'utilisateur en général après cela.
 
         Input : event (element tkinter)
@@ -130,7 +130,7 @@ class SetupFractale(object):
                 buttonChoixCouleur (element tkinter)
         Output : None """
 
-        # Appel de la méthode privé 
+        # Appel de la méthode privé e
         reponseUtilisateur = self.__QuestionTkinter__("Choix Couleur Type", "Voulez-vous une génération aléatoire de couleurs ?")
         # Action différente en fonction de la réponse utilisateur
         if reponseUtilisateur == 'no': # Gestion de la couleur unique
@@ -149,7 +149,7 @@ class SetupFractale(object):
 
 
     def LongueurTraitAffichage(self, value, textlongueurTrait):
-        """ Méthode modifiant l'affiche de la valeur de longeur du trait sur l'interface utilisteur
+        """ Méthode modifiant l'affichage de la valeur de longeur du trait sur l'interface utilisteur
         et sur les attributs de MainFractaleGestion.
         
         Input : value (str),
