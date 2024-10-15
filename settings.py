@@ -13,6 +13,9 @@ import time
 from random import randint
 # Module Webbrowser
 import webbrowser
+# Module ttkbootstrap
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 
 # Liste du nombre de fractale pour l'interface utilisateur

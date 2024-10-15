@@ -304,18 +304,24 @@ def LienOuvrir(lien):
     Ouput : None """
     webbrowser.open_new(lien)
 
+
+def SeparatorAdd():
+    """ Fonction qui ajoute un séparateur pour épurer l'affichage"""
+    
+    # Ajout d'un séparateur entre les sections
+    separator = ttk.Separator(framePanelModif, orient='horizontal')
+    separator.pack(fill='x', pady=5)
+
+
 # --------------------------------------------------------------- #
 # -------------------------- TOOL BOX --------------------------- #
 # --------------------------------------------------------------- #
 
-# Element globaux
-bgHomePage = "#f2f2ff"
-bgFramePanelModif = "#fc3fc3"
+# Element global
 widthFrameModifPanel = 200
 
 # Initialisation de la fenetre Mère
-fenetre = Tk()
-fenetre.config(bg = bgHomePage)
+fenetre = ttk.Window(themename = "sandstone")
 fenetre.geometry("900x600")
 fenetre.title("FractaloPY | © Cyanne Théo Loan Quentin")
 
@@ -325,7 +331,7 @@ fenetre.title("FractaloPY | © Cyanne Théo Loan Quentin")
 # --------------------------------------------------------------- #
 
 # Frame qui contien le canvas et les bouton pause
-frameBoxCanvas = Frame(fenetre, bg = None)
+frameBoxCanvas = Frame(fenetre)
 frameBoxCanvas.pack(side = RIGHT, expand=True, fill=BOTH)
 
 # Setup des elements turtle
@@ -336,21 +342,21 @@ turtle = RawTurtle(screen)
 screen.tracer(0)
 
 # Box bouton pause et génération d'image
-frameBoxButton = Frame(frameBoxCanvas, bg="blue")
+frameBoxButton = Frame(frameBoxCanvas)
 frameBoxButton.pack(side=BOTTOM, fill='x')
 
 # Bouton lancer/pause (gauche)
-buttonLancerPause = Button(frameBoxButton, bg='white', width=15, text="Lancer", command=lambda: toggle_pause(fractaleType.get()))
+buttonLancerPause = Button(frameBoxButton, width=15, text="Lancer", command=lambda: toggle_pause(fractaleType.get()))
 # Utilisation de grid pour positionner
 buttonLancerPause.grid(row=0, column=0, padx=10, pady=10)
 
 # Label Titre du projet + lien GitHub, centré et bien visible
-buttonTitreLienProjet = Label(frameBoxButton, text="FractaloPy", fg="black", cursor="hand2", bg="blue", font=("Arial", 20, "bold"))
+buttonTitreLienProjet = Label(frameBoxButton, text="FractaloPy", fg="black", cursor="hand2", font=("Arial", 20, "bold"))
 buttonTitreLienProjet.grid(row=0, column=1, padx=10)  # Centré dans la colonne du milieu
 buttonTitreLienProjet.bind("<Button-1>", lambda e: LienOuvrir("https://github.com/Gandalf0207/FractaloPy"))
 
 # Bouton Générer une image (droite)
-buttonMakePlotToImg = Button(frameBoxButton, text="Enregistrer", bg="white", width=15, command=lambda: object1.SaveAsPng())
+buttonMakePlotToImg = Button(frameBoxButton, text="Enregistrer", width=15, command=lambda: object1.SaveAsPng())
 # Utilisation de grid pour positionner
 buttonMakePlotToImg.grid(row=0, column=2, padx=10, pady=10)
 
@@ -366,83 +372,99 @@ frameBoxButton.grid_columnconfigure(2, weight=1)  # Enregistrer bouton
 # --------------------------------------------------------------- #
 
 # frame global panel modif
-framePanelModif = Frame(fenetre, bg = bgFramePanelModif, width=widthFrameModifPanel)
+framePanelModif = Frame(fenetre, width=widthFrameModifPanel)
 framePanelModif.pack(anchor=W, side=LEFT, expand=False, fill='y', padx=10, pady=10)
 
 # Box1 : Profondeur
-box1Profondeur = Frame(framePanelModif, bg = None)
+box1Profondeur = Frame(framePanelModif)
 box1Profondeur.pack(padx = 5, pady = 5, fill='x')
 valeurProfondeur =  StringVar()
 valeurProfondeur.set(5)
 textProfondeur = Label(box1Profondeur, text=f"Profondeur : {valeurProfondeur.get()}")
 textProfondeur.pack(fill='x')
-scrollBarProfondeur = Scale(box1Profondeur, variable=valeurProfondeur,orient='horizontal',from_=1, to=11,showvalue=0, command=lambda value:object1.ProfondeurAffichage(value=value, textProfondeur=textProfondeur))
+scrollBarProfondeur = Scale(box1Profondeur, variable=valeurProfondeur,orient='horizontal',from_=1, to=11,showvalue=0,cursor='hand2', command=lambda value:object1.ProfondeurAffichage(value=value, textProfondeur=textProfondeur))
 scrollBarProfondeur.pack(fill='x')
 
+SeparatorAdd()
+
 # Box2 : Couleur
-box2Couleur = Frame(framePanelModif, bg=None)
+box2Couleur = Frame(framePanelModif)
 box2Couleur.pack(pady=5, padx=5, fill='x')
-bouttonChoixCouleur = Button(box2Couleur, text="Couleur : ▶️", command=lambda:object1.ChoixCouleur(cadreVisuelCouleur=cadreVisuelCouleur, bouttonChoixCouleur=bouttonChoixCouleur))
+bouttonChoixCouleur = Button(box2Couleur,cursor='hand2', text="Couleur : ▶️", command=lambda:object1.ChoixCouleur(cadreVisuelCouleur=cadreVisuelCouleur, bouttonChoixCouleur=bouttonChoixCouleur))
 bouttonChoixCouleur.pack(fill='x')
 cadreVisuelCouleur = Label(box2Couleur, bg = "#c3c3c3", text="#c3c3c3")
 cadreVisuelCouleur.pack(fill='x')
 
+SeparatorAdd()
+
 # Box 3 : Longueur trait
-box3longueurTrait = Frame(framePanelModif, bg = None)
+box3longueurTrait = Frame(framePanelModif)
 box3longueurTrait.pack(pady=5,padx=5,fill='x')
 valeurlongueurTrait = StringVar()
 valeurlongueurTrait.set(200)
 textlongueurTrait = Label(box3longueurTrait, text=f"Longueur trait : {valeurlongueurTrait.get()}")
 textlongueurTrait.pack(fill='x')
-scrollBarlongueurTrait = Scale(box3longueurTrait, variable=valeurlongueurTrait, orient='horizontal', from_=100, to=400, showvalue=0, command=lambda value:object1.LongueurTraitAffichage(value = value, textlongueurTrait=textlongueurTrait))
+scrollBarlongueurTrait = Scale(box3longueurTrait,cursor='hand2', variable=valeurlongueurTrait, orient='horizontal', from_=100, to=400, showvalue=0, command=lambda value:object1.LongueurTraitAffichage(value = value, textlongueurTrait=textlongueurTrait))
 scrollBarlongueurTrait.pack(fill='x')
 
+SeparatorAdd()
+
 # Box 4 : Clear Canva Matplotlib
-box4Clear = Frame(framePanelModif, bg = None)
+box4Clear = Frame(framePanelModif)
 box4Clear.pack(pady=5, padx=5,fill='x')
 textButtonClear = Label(box4Clear, text="Nettoyage Toile")
 textButtonClear.pack()
-buttonClear = Button(box4Clear, text="Clear !", command=lambda:object1.ClearMake(cadreVisuelBackground=cadreVisuelBackground))
+buttonClear = Button(box4Clear, text="Clear !",cursor='hand2', command=lambda:object1.ClearMake(cadreVisuelBackground=cadreVisuelBackground))
 buttonClear.pack(fill='x')
 
+SeparatorAdd()
+
 # Box 5 : ArrièrePlan
-box5Background = Frame(framePanelModif, bg= None)
+box5Background = Frame(framePanelModif)
 box5Background.pack(fill='x', padx=5, pady=5)
-butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️", command=lambda:object1.ChoixBackground(cadreVisuelBackground=cadreVisuelBackground))
+butttonChoixBackground = Button(box5Background,text="Arrière Plan : ▶️",cursor='hand2', command=lambda:object1.ChoixBackground(cadreVisuelBackground=cadreVisuelBackground))
 butttonChoixBackground.pack(fill='x')
 cadreVisuelBackground = Label(box5Background, bg = "#ffffff", text="#ffffff")
 cadreVisuelBackground.pack(fill='x')
 
+SeparatorAdd()
+
 # box 6 : orientation mouse 
-box6Orientation = Frame(framePanelModif, bg = None)
+box6Orientation = Frame(framePanelModif)
 box6Orientation.pack(fill='x', pady=5, padx=5)
 valeurOrientation = StringVar()
 valeurOrientation.set(180)
 textOrientation = Label(box6Orientation, text=f"Orientation : {valeurOrientation.get()}")
 textOrientation.pack(fill='x')
-scrollBarOrientation = Scale(box6Orientation, variable=valeurOrientation, orient='horizontal', from_=0, to=360, showvalue=0, command=lambda value:object1.OrientationAffichage(value = value, textOrientation = textOrientation))
+scrollBarOrientation = Scale(box6Orientation,cursor='hand2', variable=valeurOrientation, orient='horizontal', from_=0, to=360, showvalue=0, command=lambda value:object1.OrientationAffichage(value = value, textOrientation = textOrientation))
 scrollBarOrientation.pack(fill='x')
 
+SeparatorAdd()
+
 #box 7 : épaisseur trait
-box7Epaisseur = Frame(framePanelModif, bg = None)
+box7Epaisseur = Frame(framePanelModif)
 box7Epaisseur.pack(fill='x', pady = 5, padx = 5)
 valeurEpaisseur = StringVar()
 valeurEpaisseur.set(1)
 textEpaisseur = Label(box7Epaisseur, text=f"Epaisseur trait : {valeurEpaisseur.get()}")
 textEpaisseur.pack(fill='x')
-scrollBarEpaisseur = Scale(box7Epaisseur, variable=valeurEpaisseur, orient='horizontal', from_=1, to=5, showvalue=0, command=lambda value:object1.EpaisseurAffichage(value = value, textEpaisseur = textEpaisseur))
+scrollBarEpaisseur = Scale(box7Epaisseur, variable=valeurEpaisseur,cursor='hand2', orient='horizontal', from_=1, to=5, showvalue=0, command=lambda value:object1.EpaisseurAffichage(value = value, textEpaisseur = textEpaisseur))
 scrollBarEpaisseur.pack(fill='x')
 
+SeparatorAdd()
+
 # box 8 : position curseur
-box8CurseurPosition = Frame(framePanelModif, bg = None)
+box8CurseurPosition = Frame(framePanelModif)
 box8CurseurPosition.pack(fill='x', pady = 5, padx=5)
-textButtonCurseurPosition = Button(box8CurseurPosition, text = "Position Curseur", command=lambda:object1.ActiveCurseurPosition())
+textButtonCurseurPosition = Button(box8CurseurPosition, cursor='hand2', text = "Position Curseur", command=lambda:object1.ActiveCurseurPosition())
 textButtonCurseurPosition.pack(fill='x')
-cadreInfosPositions = Label(box8CurseurPosition, bg = None, text=f"{turtle.pos()}")
+cadreInfosPositions = Label(box8CurseurPosition, text=f"{turtle.pos()}")
 cadreInfosPositions.pack(fill='x')
 
+SeparatorAdd()
+
 # box 9 : Ajout d'un menu pour le choix des fractales
-box9ChoixFractale = Frame(framePanelModif, bg=None)
+box9ChoixFractale = Frame(framePanelModif)
 box9ChoixFractale.pack(pady=5, padx=5, fill='x')
 textChoixFractale = Label(box9ChoixFractale, text="Choix de la fractale :")
 textChoixFractale.pack(fill='x')
