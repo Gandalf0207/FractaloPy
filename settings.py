@@ -17,11 +17,15 @@ import webbrowser
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
+from os.path import join 
+import os
+from turtle import TurtleGraphicsError  # Import de l'erreur
+
 
 # Liste du nombre de fractale pour l'interface utilisateur
 fractaleListe = ("Sierpinski", "Koch", "Vicsek", "Fibonacci", "Pythagore")
 
-
+cursorListe = ["sun", "leaf", "unicorn"]
 
 
 # -------------------------------------------------------------------------------------- #

@@ -279,6 +279,88 @@ class SetupFractale(object):
 
 
 
+class Cursor():
+    """ class cursor permettant de modifier l'apparance du curseur sur la fenetre turtle"""
+
+    def __init__(self, turtle, screen) -> None:
+        """ Méthode d'initialisation de la class cursor, permettant de changer de curseur.
+        Prend la forme d'une fenetre avec une sélection multiple
+        
+        Input : turtle (element turtle)
+                screen (element turtle)
+                 
+        Output : None """
+
+        self.turtle = turtle
+        self.screen = screen
+        self.cursorPath = ["arrow", "circle", "turtle", "classic", "square"]  # Liste de base pour les formes
+        self.cursorName = ["arrow", "circle", "turtle", "classic", "square"] + [i for i in cursorListe] # Récupération des noms des éléments
+
+        for i in cursorListe:
+            path = os.path.join("Cursor", f"{i}.gif")  # Assurez-vous que les fichiers sont des .gif
+            if os.path.exists(path):
+                try:
+                    self.screen.register_shape(path)  # Enregistrement de la forme
+                    self.cursorPath.append(path)
+                except TurtleGraphicsError as e:  # Gestion d'exception corrigée
+                    pass
+
+        # Variable pour vérifier si la fenêtre est déjà ouverte
+        self.window_open = False
+        self.window = None
+
+
+
+    def OpenWindow(self):
+        """ Méthode qui permet d'ouvrir la fenetre qui contient tout les boutons de sélection. 
+        Cette méthode contient également une vérification pour éviter d'ouvrir plusieur fois 
+        la même fenetre.
+        
+        Input : None
+        Output : None """
+
+        # Si la fenêtre est déjà ouverte, on ne fait rien
+        if self.window_open:
+            return
+        
+        # Créer la fenêtre et indiquer qu'elle est ouverte
+        self.window = Toplevel()
+        self.window.title("Choisissez un curseur")
+        self.window.geometry("300x400")
+        self.window.protocol("WM_DELETE_WINDOW", self.__close_window__)
+        self.window_open = True
+
+        # Ajouter des boutons pour chaque curseur
+        for idx, cursor_file in enumerate(self.cursorPath):
+            button = Button(self.window, text=f"Curseur : {self.cursorName[idx]}", command=lambda c=cursor_file: self.__change_cursor__(c))
+            button.pack(pady=10)
+
+
+
+    def __change_cursor__(self, cursor_file):
+        """Change le curseur pour le nouveau fichier sélectionné"""
+        # Change le curseur de la tortue
+        self.turtle.shape(cursor_file)  # Utilise les formes standards
+        self.turtle.showturtle()
+        self.screen.update()
+        for i in range(len(self.cursorPath)): # Modification du nom de la forme sélectionné sur l'interface utilisateur
+            if self.cursorPath[i] == cursor_file:
+                cadreInfosCurseur.config(text=self.cursorName[i]) 
+        self.__close_window__()
+
+
+
+    def __close_window__(self):
+        """Ferme la fenêtre et réinitialise l'état"""
+        self.window_open = False
+        self.window.destroy()
+
+
+
+
+
+
+
 
 def toggle_pause(typeFractale = None):
     """ Fonction qui permet de mettre à jour l'affichage du bouton pause et 
@@ -324,7 +406,7 @@ widthFrameModifPanel = 200
 
 # Initialisation de la fenetre Mère
 fenetre = ttk.Window(themename = "sandstone")
-fenetre.geometry("900x600")
+fenetre.geometry("900x665")
 fenetre.title("FractaloPY | © Cyanne Théo Loan Quentin")
 
 
@@ -474,6 +556,15 @@ fractaleType = StringVar(value=fractaleListe[0])  # Valeur par défaut
 choixFractaleMenu = OptionMenu(box9ChoixFractale, fractaleType, *fractaleListe) 
 choixFractaleMenu.pack(fill='x')
 
+SeparatorAdd()
+
+# box 10 : Bouton choix curseur
+box10CurseurSelect = Frame(framePanelModif)
+box10CurseurSelect.pack(pady=5, padx=5, fill='x')
+ButtonChoixCurseur = Button(box10CurseurSelect,cursor='hand2',  text="Choix Curseur", command=lambda:c.OpenWindow())
+ButtonChoixCurseur.pack(fill='x')
+cadreInfosCurseur = Label(box10CurseurSelect, text="classic")
+cadreInfosCurseur.pack(fill='x')
 
 
 # --------------------------------------------------------------- #
@@ -482,6 +573,7 @@ choixFractaleMenu.pack(fill='x')
 
 # Initialisation avec les valeurs par défault
 object1 = SetupFractale(profondeur=5,couleurTrait='#c3c3c3',longueurTrait=200,couleurBackground="#ffffff", turtle=turtle, screen= screen)
+c = Cursor(turtle, screen)
 
 # fenetre loop 
 fenetre.mainloop()
