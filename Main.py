@@ -17,7 +17,7 @@ class SetupFractale(object):
     
     def __init__(self, profondeur, couleurTrait, longueurTrait, couleurBackground, turtle, screen) -> None:
         """ Méthode d'initialisation de la class, grâce à l'instanciation de la class par l'objet1. 
-        Cette méthode permet donc la création de cette meme class et l'instanciation de la class MainFractaleFestion
+        Cette méthode permet donc la création de cette meme class et l'instanciation de la class MainFractaleGestion
 
         Input : prodondeur (int), 
                 couleurTrait (str), 
