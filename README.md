@@ -41,17 +41,17 @@ Pour ce faire, nous vous mettons à disposition la possibiliser de modifier :
 - L'épaisseur du trait de dessin
 - Le placement du curseur sur la toile
 
-De plus, vous avez la possibilité d'enregister, si vous le souhaitez une ou plusieurs image(s) de votre travail !
+De plus, vous avez la possibilité d'enregister, si vous le souhaitez une ou plusieurs image(s) de votre travail et de changer le curseur de dessins !
 
 
 <br></br>
 
 ## Intégration développeurs :
 
-Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractales / récupérer les différentes ```class object```, ou bien simplement comprendre le code source de $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$. Alors ces différentes interfaces sont pour vous !
+Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractales / récupérer les différentes ```class object```, ajouter de nouveaux curseurs ou bien simplement comprendre le code source de $\textsf {Fractalo} \textsf{\color{#ba1ce6}{Py}}$. Alors ces différentes interfaces sont pour vous !
 
 ### Main.py 
-#### class Setup
+#### class SetupFractale
 
 | Fonctions                                                                                                                           | Description                                                                                                             |
 | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -66,6 +66,14 @@ Vous souhaitez modifier le projet ? Vous souhaiter intéger de nouvelles fractal
 | def ActiveCurseurPosition(self):                                                                                                    | Méthode qui active simplement le get du click gauche et qui appel la méthode privé compétente <br></br> Input : None <br> Output : None                                                                                                                                                                                                                                                            |
 | def LancerPauseAppel(self, typeFractale = None):                                                                                    | Méthode permettant de lancer ou de mettre en pause en fonction de l'état de la pause et d'agir sur la class MainFractaleGestion <br></br> Input : <br> - typeFractale : (str) None si aucune valeur envoyé <br> Output : None                                                                                                                                                                       |
 | def SaveAsPng(self):                                                                                                                | Méthode permettant l'enregistrement du canvas déssiné par l'utilisateur au formet png. Le script prend un screen de la fenetre canvas, le sauvgarde en PostScript et puis le convertit au format png. Il ouvre une fenetre permettant à l"utilisteur de choisir le chemin d'enregistrement de l'image. <br></br> Input : None <br> Output : image.png                                          |
+
+#### class Cursor
+
+| Fonctions                                                                                                                           | Description                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| def __init__(self, turtle, screen) -> None:                                                                                         | Méthode d'initialisation de la class cursor, permettant de changer de curseur. Prend la forme d'une fenetre avec une sélection multiple <br></br>  Input : <br> - turtle (element turtle), <br> - screen (element turtle) <br>  Output : None                                                                                                                                                  |
+| OpenWindow(self)                                                                                                                    | Méthode qui permet d'ouvrir la fenetre qui contient tout les boutons de sélection. Cette méthode contient également une vérification pour éviter d'ouvrir plusieur fois la même fenetre. <br></br>  Input : None <br>   Output : None                                                                                                                                                                |
+        
 
 #### Fonctions autre 
 | Fonctions                                                                                                                           | Description                                                                                                             |
@@ -182,6 +190,24 @@ class MainFractaleGestion(object):
 fractaleListe = ("Sierpinski", "Koch","<nomFractaleSimple>")
 ```
 
+<br>
+
+#### Méthode pour ajouter des curseurs custom : 
+
+> Pour ajouter des curseurs custom, vous devez suivres les étapes suivants.
+
+Placer dans le dossier `Cursor` du projet, votre curseur custom sous ce format : `< nom >.gif`
+
+<br>
+
+> Dans le fichier `settings.py` ajouter le < nom > de votre curseur **à la suite** de la liste :
+
+```Python3
+cursorListe = ["sun", "leaf", "unicorn", "< nom >"]
+```
+
+> [!TIP]
+> Vérifiez la résolution de votre image avant de l'intégrer. De plus, si vous ne voyez pas le bouton de votre curseur apparaître, vérifiez la taille de la fenêtre de sélection (mettre en grand écran).
 
 
 <br></br>
