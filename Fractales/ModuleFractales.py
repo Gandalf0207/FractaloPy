@@ -11,7 +11,7 @@ from settings import *
 
 class MainFractaleGestion(object):
     """ class de MainGestion Fractale qui permet lors de l'appel de la méthode lancer,
-    d'éxécuter et de lancer les script adéquats aux demandes de l'utilisateurs  """
+    d'éxécuter et de lancer les scripts adéquats aux demandes de l'utilisateur  """
 
     def __init__(self, profondeur, couleurTrait, longueurTrait, turtle, screen) -> None:
         """ Méthode permettant d'initialiser les valeurs de la class MainFractaleGestion 
@@ -36,7 +36,7 @@ class MainFractaleGestion(object):
 
 
     def __CouleurRandom__(self):
-        """ Méthode privé permettant de changer la couleur du trait aléatoirement
+        """ Méthode privée permettant de changer la couleur du trait aléatoirement
         
         Input : None
         Output : None """
@@ -57,7 +57,7 @@ class MainFractaleGestion(object):
 
 
     def ChangerCouleur(self, newCouleurTrait):
-        """ Méthode permettant de metrre à jour la couleur du trait de dessin
+        """ Méthode permettant de mettre à jour la couleur du trait de dessin
          
         Intput : newCouleurTrait (str)
         Output : None """
@@ -130,7 +130,7 @@ class FractaleSierpinski:
     """ class permettant de dessiner et de gérer globalement la fractale en cours de dessin / en pause"""
 
     def __init__(self, nombre, longueur, gestionnaire):
-        """Méthode d'initialisation de la class, grâce à l'intanciation de la class. 
+        """Méthode d'initialisation de la class, grâce à l'instanciation de la class. 
 
         Input : nombre (int), 
                 longueur (int), 
@@ -143,7 +143,7 @@ class FractaleSierpinski:
         self.state = []  # Pile pour sauvegarder l'état de la récursion
 
     def __DessinerSierpinski__(self, n, l):
-        """ Méthode privé permettant le dessin de la fractale appelé, 
+        """ Méthode privée permettant le dessin de la fractale appelée, 
         ainsi que la sauvegarde de son état d'avancement s'il y a une pause.
         
         Input : n (int),
