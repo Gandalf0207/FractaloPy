@@ -327,17 +327,17 @@ class Cursor():
         self.window = Toplevel()
         self.window.title("Choisissez un curseur")
         self.window.geometry("300x400")
-        self.window.protocol("WM_DELETE_WINDOW", self.__close_window__)
+        self.window.protocol("WM_DELETE_WINDOW", self.__CloseWindow__)
         self.window_open = True
 
         # Ajouter des boutons pour chaque curseur
         for idx, cursor_file in enumerate(self.cursorPath):
-            button = Button(self.window, text=f"Curseur : {self.cursorName[idx]}", command=lambda c=cursor_file: self.__change_cursor__(c))
+            button = Button(self.window, text=f"Curseur : {self.cursorName[idx]}", command=lambda c=cursor_file: self.__ChangeCursor__(c))
             button.pack(pady=10)
 
 
 
-    def __change_cursor__(self, cursor_file):
+    def __ChangeCursor__(self, cursor_file):
         """Change le curseur pour le nouveau fichier sélectionné"""
         # Change le curseur de la tortue
         self.turtle.shape(cursor_file)  # Utilise les formes standards
@@ -346,11 +346,11 @@ class Cursor():
         for i in range(len(self.cursorPath)): # Modification du nom de la forme sélectionné sur l'interface utilisateur
             if self.cursorPath[i] == cursor_file:
                 cadreInfosCurseur.config(text=self.cursorName[i]) 
-        self.__close_window__()
+        self.__CloseWindow__()
 
 
 
-    def __close_window__(self):
+    def __CloseWindow__(self):
         """Ferme la fenêtre et réinitialise l'état"""
         self.window_open = False
         self.window.destroy()
