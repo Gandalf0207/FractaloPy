@@ -5,6 +5,7 @@ from tkinter.messagebox import askquestion
 from tkinter import filedialog
 # Module Turtle
 from turtle import *
+from turtle import TurtleGraphicsError 
 # Librairie Pil
 from PIL import ImageGrab
 # Module Time
@@ -16,12 +17,15 @@ import webbrowser
 # Module ttkbootstrap
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
+# Module os
+from os.path import join 
+import os
 
 
 # Liste du nombre de fractale pour l'interface utilisateur
 fractaleListe = ("Sierpinski", "Koch", "Vicsek", "Fibonacci", "Pythagore")
-
-
+# Liste des curseurs custom
+cursorListe = ["sun", "leaf", "unicorn"]
 
 
 # -------------------------------------------------------------------------------------- #
