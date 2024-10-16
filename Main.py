@@ -12,11 +12,11 @@ from Fractales import ModuleFractales
 
 
 class SetupFractale(object):
-    """ Class contenant toutes les méthodes permettant de modifier les paramettres de génération de la fractale;
+    """ Class contenant toutes les méthodes permettant de modifier les parametres de génération de la fractale;
         Instanciation de la class MainFractaleGestion. """
     
     def __init__(self, profondeur, couleurTrait, longueurTrait, couleurBackground, turtle, screen) -> None:
-        """ Méthode d'initialisation de la class, grâce à l'intanciation de la class par l'objet1. 
+        """ Méthode d'initialisation de la class, grâce à l'instanciation de la class par l'objet1. 
         Cette méthode permet donc la création de cette meme class et l'instanciation de la class MainFractaleFestion
 
         Input : prodondeur (int), 
@@ -81,7 +81,7 @@ class SetupFractale(object):
     
     
     def __ClickButtonMoveTurtle__(self, event):
-        """ Méthode privée qui place le curseur au coordonnées choisies par l'utilisateur.
+        """ Méthode privée qui place le curseur aux coordonnées choisies par l'utilisateur.
         Mise à jour de l'interface de l'utilisateur en général après cela.
 
         Input : event (element tkinter)
@@ -108,7 +108,7 @@ class SetupFractale(object):
 
 
     def ProfondeurAffichage(self, value, textProfondeur):
-        """ Méthode modifiant l'affichage de la valeur de prodondeur sur l'interface utilisteur
+        """ Méthode modifiant l'affichage de la valeur de prodondeur sur l'interface utilisateur
         et sur les attributs de MainFractaleGestion.
         
         Input : value (str),
@@ -124,7 +124,7 @@ class SetupFractale(object):
     def ChoixCouleur(self, cadreVisuelCouleur, bouttonChoixCouleur):
         """ Méthode modifiant l'affichage de la valeur couleur sur l'interface utilisteur (code + bg visualisation)
         et sur les attributs de MainFractaleGestion. (soit unique / soit aléatoire). Ouverture d'une fenetre
-        question (unique / aléatoire). Ouverture d'une fenetre que choix de couleur.
+        question (unique / aléatoire). Ouverture d'une fenetre choix de couleur.
         
         Input : cadreVisuelCouleur (element tkinter), 
                 buttonChoixCouleur (element tkinter)
@@ -182,7 +182,7 @@ class SetupFractale(object):
 
 
     def ChoixBackground(self, cadreVisuelBackground):
-        """ Méthode permettant de choisir l'arrière plan du canvas. Ouverture d'une fenetr de choix de 
+        """ Méthode permettant de choisir l'arrière plan du canvas. Ouverture d'une fenetre de choix de 
         couleur, Mise à jour de l'interface utilisateur en fonction.  
         
         Input : cadreVisuelBackground (element tkinter)
@@ -224,7 +224,7 @@ class SetupFractale(object):
 
 
     def ActiveCurseurPosition(self):
-        """ Méthode qui active simplement le get du click gauche et qui appel la méthode privé compétente
+        """ Méthode qui active simplement le get du click gauche et qui appelle la méthode privé compétente
         
         Input : None
         Output : None """
@@ -253,8 +253,8 @@ class SetupFractale(object):
 
     def SaveAsPng(self):
         """ Méthode permettant l'enregistrement du canvas déssiné par l'utilisateur au formet png.
-        Le script prend un screen de la fenetre canvas, le sauvgarde en PostScript et puis le convertit au format png.
-        Il ouvre une fenetre permettant à l"utilisteur de choisir le chemin d'enregistrement de l'image.
+        Le script prend un screen de la fenetre canvas, le sauvegarde en PostScript et puis le convertit au format png.
+        Il ouvre une fenetre permettant à l'utilisteur de choisir le chemin d'enregistrement de l'image.
         
         Input : None
         Output : image.png """
@@ -332,7 +332,7 @@ fenetre.title("FractaloPY | © Cyanne Théo Loan Quentin")
 # --------------------------- CANVAS ---------------------------- #
 # --------------------------------------------------------------- #
 
-# Frame qui contien le canvas et les bouton pause
+# Frame qui contient le canvas et les boutons pause
 frameBoxCanvas = Frame(fenetre)
 frameBoxCanvas.pack(side = RIGHT, expand=True, fill=BOTH)
 
