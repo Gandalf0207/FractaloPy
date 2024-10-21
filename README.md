@@ -223,7 +223,7 @@ git clone https://github.com/Gandalf0207/FractaloPy.git
 
 > Dans le dossier du projet, dans un terminal, rentrer la commande :
 ```cmd
-python -m pip install Requirements.txt
+python -m pip install -r Requirements.txt
 ```
 
 Après cela, exécuter le fichier `Main.py`
